@@ -36,7 +36,7 @@ public class Call implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 
-    @Column(nullable = false, insertable = false, updatable = false)
+    @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated;
 
