@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="1519975980041" author="bkorinnyi">
+        <createTable tableName="client">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(128)"/>
+            <column name="full_name" type="varchar(128)"/>
+            <column name="proof" type="varchar(64)"/>
+            <column name="registered" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1519976556684" author="bkorinnyi">
+        <createTable tableName="accept_rule">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="int"/>
+            <column name="fact_proof" type="varchar(128)"/>
+            <column name="creation" type="DATETIME" defaultValue="now()"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1519977754798" author="bkorinnyi">
+        <createTable tableName="call_number">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="int"/>
+            <column name="creation" type="DATETIME" defaultValue="now()"/>
+            <column name="number" type="varchar(32)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1519977807044" author="bkorinnyi">
+        <createTable tableName="alarm">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="int"/>
+            <column name="voice" type="varchar(1024)"/>
+            <column name="proof_voice" type="varchar(1024)"/>
+            <column name="message" type="varchar(1024)"/>
+            <column name="creation" type="DATETIME" defaultValue="now()"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1519978191419" author="bkorinnyi">
+        <createTable tableName="call">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="int"/>
+            <column name="reason" type="varchar(32)"/>
+            <column name="date" type="DATETIME" defaultValue="now()"/>
+            <column name="provider" type="varchar(32)"/>
+            <column name="call_number_id" type="int"/>
+            <column name="status" type="varchar(32)"/>
+            <column name="listened_full" type="boolean"/>
+            <column name="duration" type="int"/>
+            <column name="cost" type="DOUBLE PRECISION"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1519978191420" author="bkorinnyi">
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="accept_rule"
+                                 constraintName="fk_accept_rule_client"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1519978191421" author="bkorinnyi">
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="call_number"
+                                 constraintName="fk_call_number_client"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1519978191422" author="bkorinnyi">
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="alarm"
+                                 constraintName="fk_alarm_client"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1519978191423" author="bkorinnyi">
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="call"
+                                 constraintName="fk_call_client"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+</databaseChangeLog>
