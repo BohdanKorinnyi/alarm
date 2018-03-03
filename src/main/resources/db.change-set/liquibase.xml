@@ -112,4 +112,44 @@
                                  referencedColumnNames="id"
                                  referencedTableName="client"/>
     </changeSet>
+    <changeSet id="1520105646538" author="bkorinnyi">
+        <dropColumn tableName="client" columnName="name"/>
+        <dropColumn tableName="client" columnName="full_name"/>
+        <dropColumn tableName="alarm" columnName="proof_voice"/>
+        <dropColumn tableName="alarm" columnName="voice"/>
+        <dropColumn tableName="alarm" columnName="message"/>
+        <dropColumn tableName="call" columnName="date"/>
+        <addColumn tableName="client">
+            <column name="first_name" type="varchar(64)"/>
+            <column name="last_name" type="varchar(128)"/>
+        </addColumn>
+        <addColumn tableName="alarm">
+            <column name="name_record" type="varchar(128)"/>
+            <column name="address_record" type="varchar(128)"/>
+            <column name="type" type="varchar(32)"/>
+            <column name="active" type="boolean"/>
+        </addColumn>
+        <addColumn tableName="call">
+            <column name="created" type="DATETIME"/>
+            <column name="updated" type="DATETIME"/>
+        </addColumn>
+        <addColumn tableName="client">
+            <column name="updated" type="DATETIME"/>
+        </addColumn>
+        <modifyDataType tableName="client" columnName="proof" newDataType="boolean"/>
+    </changeSet>
+    <changeSet id="1520105646540" author="bkorinnyi">
+        <addForeignKeyConstraint baseColumnNames="call_number_id"
+                                 baseTableName="call"
+                                 constraintName="fk_call_call_number"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="call_number"/>
+    </changeSet>
+    <changeSet id="1520105646545" author="bkorinnyi">
+        <dropTable tableName="accept_rule"/>
+    </changeSet>
 </databaseChangeLog>
