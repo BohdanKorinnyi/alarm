@@ -1,8 +1,10 @@
-package com.arloid.alarmcall.client;
+package com.arloid.alarmcall.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
+
+import com.arloid.alarmcall.entity.Client;
 
 public interface ClientRepository extends Repository<Client, Long> {
 
@@ -10,7 +12,7 @@ public interface ClientRepository extends Repository<Client, Long> {
 
     Page<Client> findAll(Pageable pageable);
 
-    Page<Client> findByFirstNameContaining(String firstName, Pageable pageable);
+    Page<Client> findByFirstNameContaining(String name, Pageable pageable);
 
     Client save(Client client);
 }

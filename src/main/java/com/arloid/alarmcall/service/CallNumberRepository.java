@@ -1,8 +1,10 @@
-package com.arloid.alarmcall.callnumber;
+package com.arloid.alarmcall.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
+
+import com.arloid.alarmcall.entity.CallNumber;
 
 public interface CallNumberRepository extends Repository<CallNumber, Long> {
 
