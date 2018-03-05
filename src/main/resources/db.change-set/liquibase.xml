@@ -152,4 +152,10 @@
     <changeSet id="1520105646545" author="bkorinnyi">
         <dropTable tableName="accept_rule"/>
     </changeSet>
+    <changeSet id="1520253608370" author="bkorinnyi">
+        <modifyDataType tableName="alarm" columnName="client_id" newDataType="BIGINT"/>
+        <modifyDataType tableName="call" columnName="client_id" newDataType="BIGINT"/>
+        <modifyDataType tableName="call" columnName="call_number_id" newDataType="BIGINT"/>
+        <modifyDataType tableName="call_number" columnName="client_id" newDataType="BIGINT"/>
+    </changeSet>
 </databaseChangeLog>
