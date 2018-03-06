@@ -1,35 +1,38 @@
 package com.arloid.alarmcall.controller;
 
+import com.arloid.alarmcall.entity.Call;
+import com.arloid.alarmcall.service.CallService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
+@AllArgsConstructor
 @RequestMapping("calls")
+@Api(description = "Operations with calls", tags = "Call endpoints")
 public class CallController {
 
+    private final CallService callService;
+
     @GetMapping
-    public ResponseEntity findAll() {
-        return ResponseEntity.noContent().build();
+    @ApiOperation(value = "Get all calls")
+    public ResponseEntity findAll(@RequestParam int size, @RequestParam int page) {
+        return ResponseEntity.ok(callService.findAll(size, page));
     }
 
-    @GetMapping("{callIds}")
-    public ResponseEntity findById(@PathVariable List<Long> callIds) {
-        return ResponseEntity.noContent().build();
+    @GetMapping("number/{numberId}")
+    @ApiOperation(value = "Get all calls by number ID")
+    public ResponseEntity findByCallNumberId(@PathVariable long numberId, @RequestParam int size, @RequestParam int page) {
+        return ResponseEntity.ok(callService.findByCallNumberId(numberId, size, page));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity save() {
-        return ResponseEntity.noContent().build();
+    @ApiOperation(value = "Create a new call")
+    public void save(@RequestBody Call call) {
+        callService.save(call);
     }
-
-    @PatchMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity update() {
-        return ResponseEntity.noContent().build();
-    }
-
 }
