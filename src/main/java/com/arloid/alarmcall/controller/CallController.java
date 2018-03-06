@@ -1,5 +1,6 @@
 package com.arloid.alarmcall.controller;
 
+import com.arloid.alarmcall.dto.CallDto;
 import com.arloid.alarmcall.entity.Call;
 import com.arloid.alarmcall.service.CallService;
 import io.swagger.annotations.Api;
@@ -32,7 +33,7 @@ public class CallController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new call")
-    public ResponseEntity save(@RequestBody Call call) {
+    public ResponseEntity save(@RequestBody CallDto call) {
         return ResponseEntity.ok(callService.save(call));
     }
 }
