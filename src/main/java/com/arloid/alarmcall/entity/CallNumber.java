@@ -2,6 +2,7 @@ package com.arloid.alarmcall.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 import java.io.Serializable;
