@@ -1,35 +1,27 @@
 package com.arloid.alarmcall.controller;
 
+import com.arloid.alarmcall.entity.Client;
+import com.arloid.alarmcall.service.ClientService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
+@AllArgsConstructor
 @RequestMapping("clients")
 public class ClientController {
 
-    @GetMapping
-    public ResponseEntity findAll() {
-        return ResponseEntity.noContent().build();
-    }
+    private final ClientService clientService;
 
-    @GetMapping("{clientIds}")
-    public ResponseEntity findById(@PathVariable List<Long> clientIds) {
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity findAll(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(clientService.findAll(page, size));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity save() {
-        return ResponseEntity.noContent().build();
+    public ResponseEntity save(@RequestBody Client client) {
+        return ResponseEntity.ok(clientService.save(client));
     }
-
-    @PatchMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity update() {
-        return ResponseEntity.noContent().build();
-    }
-
 }
