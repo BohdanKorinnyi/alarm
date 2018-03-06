@@ -214,4 +214,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="call_status"/>
     </changeSet>
+    <changeSet id="1520376853849" author="bkorinnyi">
+        <addDefaultValue tableName="client" columnName="registered" defaultValue="now()"/>
+    </changeSet>
 </databaseChangeLog>

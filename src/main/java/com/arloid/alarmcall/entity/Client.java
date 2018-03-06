@@ -29,7 +29,7 @@ public class Client implements Serializable {
     @Column
     private Boolean proof;
 
-    @Column
+    @Column(insertable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date registered;
 
