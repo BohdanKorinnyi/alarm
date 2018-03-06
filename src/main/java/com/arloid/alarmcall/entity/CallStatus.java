@@ -12,5 +12,5 @@ public class CallStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "value")
-    private Long name;
+    private String name;
 }
