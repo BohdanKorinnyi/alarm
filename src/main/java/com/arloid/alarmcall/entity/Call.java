@@ -1,21 +1,13 @@
 package com.arloid.alarmcall.entity;
 
+import lombok.Data;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import lombok.Getter;
-import lombok.Setter;
-
+@Data
 @Entity
 public class Call implements Serializable {
 
@@ -26,30 +18,21 @@ public class Call implements Serializable {
     private Long id;
 
     @ManyToOne
-    @Getter @Setter private Client client;
-
-    @ManyToOne
-    @Getter @Setter private CallNumber callNumber;
+    private CallNumber callNumber;
 
     @Column(nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @Getter private Date created;
+    private Date created;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    @Getter @Setter private Date updated;
-
-    @Column(nullable = false)
-    private String reason;
+    private Date updated;
 
     @Column(nullable = false)
     private String provider;
 
-    @Column(nullable = false)
-    private String status;
-
     @Column(name = "listened_full", nullable = false)
-    private boolean fullyListened;
+    private Boolean fullyListened;
 
     @Column
     private Integer duration;
