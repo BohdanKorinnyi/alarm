@@ -32,7 +32,7 @@ public class CallController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new call")
-    public void save(@RequestBody Call call) {
-        callService.save(call);
+    public ResponseEntity save(@RequestBody Call call) {
+        return ResponseEntity.ok(callService.save(call));
     }
 }

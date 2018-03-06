@@ -31,7 +31,7 @@ public class CallNumberController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new phone number")
-    public void save(@RequestBody CallNumber callNumber) {
-        callNumberService.save(callNumber);
+    public ResponseEntity save(@RequestBody CallNumber callNumber) {
+        return ResponseEntity.ok(callNumberService.save(callNumber));
     }
 }

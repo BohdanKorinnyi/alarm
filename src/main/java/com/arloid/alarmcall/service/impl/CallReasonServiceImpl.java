@@ -22,11 +22,11 @@ public class CallReasonServiceImpl implements CallReasonService {
     }
 
     @Override
-    public void save(CallReason callReason) {
+    public CallReason save(CallReason callReason) {
         if (nonNull(callReasonRepository.findByName(callReason.getName()))) {
             throw new SaveExistingEntityException("This call reason already exists in database");
         }
-        callReasonRepository.save(callReason);
+        return callReasonRepository.save(callReason);
     }
 
     @Override

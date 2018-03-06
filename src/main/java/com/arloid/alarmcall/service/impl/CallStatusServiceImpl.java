@@ -22,11 +22,11 @@ public class CallStatusServiceImpl implements CallStatusService {
     }
 
     @Override
-    public void save(CallStatus status) {
+    public CallStatus save(CallStatus status) {
         if (nonNull(callStatusRepository.findByName(status.getName()))) {
             throw new SaveExistingEntityException("This call status already exists in database");
         }
-        callStatusRepository.save(status);
+        return callStatusRepository.save(status);
     }
 
     @Override

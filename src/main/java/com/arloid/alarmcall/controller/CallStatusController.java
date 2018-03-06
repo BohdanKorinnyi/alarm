@@ -26,7 +26,7 @@ public class CallStatusController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new status")
-    public void save(@RequestBody CallStatus callStatus) {
-        callStatusService.save(callStatus);
+    public ResponseEntity<CallStatus> save(@RequestBody CallStatus callStatus) {
+        return ResponseEntity.ok(callStatusService.save(callStatus));
     }
 }
