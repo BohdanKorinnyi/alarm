@@ -158,4 +158,60 @@
         <modifyDataType tableName="call" columnName="call_number_id" newDataType="BIGINT"/>
         <modifyDataType tableName="call_number" columnName="client_id" newDataType="BIGINT"/>
     </changeSet>
+    <changeSet id="1520368218842" author="bkorinnyi">
+        <addColumn tableName="call_number">
+            <column name="active" type="boolean"/>
+        </addColumn>
+        <addColumn tableName="call">
+            <column name="alarm_id" type="bigint"/>
+            <column name="call_reason_id" type="bigint"/>
+            <column name="call_status_id" type="bigint"/>
+        </addColumn>
+        <dropColumn tableName="call" columnName="client_id"/>
+        <dropColumn tableName="call" columnName="reason"/>
+        <dropColumn tableName="call" columnName="status"/>
+    </changeSet>
+    <changeSet id="1520368537937" author="bkorinnyi">
+        <createTable tableName="call_reason">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+        <createTable tableName="call_status">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="value" type="varchar(64)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1520368918235" author="bkorinnyi">
+        <addForeignKeyConstraint baseColumnNames="alarm_id"
+                                 baseTableName="call"
+                                 constraintName="fk_call_alarm"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="alarm"/>
+        <addForeignKeyConstraint baseColumnNames="call_reason_id"
+                                 baseTableName="call"
+                                 constraintName="fk_call_call_reason"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="call_reason"/>
+        <addForeignKeyConstraint baseColumnNames="call_status_id"
+                                 baseTableName="call"
+                                 constraintName="fk_call_call_status"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="call_status"/>
+    </changeSet>
 </databaseChangeLog>

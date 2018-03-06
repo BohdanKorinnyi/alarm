@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("alarms")
-@Api(description = "Operations with alarm", consumes = "application/json")
+@Api(description = "Operations with alarm", tags = "Alarm's endpoints")
 public class AlarmController {
 
     private final AlarmService alarmService;
