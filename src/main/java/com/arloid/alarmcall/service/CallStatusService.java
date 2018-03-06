@@ -7,7 +7,7 @@ import java.util.List;
 public interface CallStatusService {
     CallStatus findByName(String name);
 
-    void save(CallStatus status);
+    CallStatus save(CallStatus status);
 
     List<CallStatus> findAll();
 }

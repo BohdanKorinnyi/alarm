@@ -7,7 +7,7 @@ import java.util.List;
 public interface CallReasonService {
     CallReason findByName(String name);
 
-    void save(CallReason reason);
+    CallReason save(CallReason reason);
 
     List<CallReason> findAll();
 }

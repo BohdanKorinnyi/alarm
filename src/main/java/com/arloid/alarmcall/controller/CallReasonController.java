@@ -26,7 +26,7 @@ public class CallReasonController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new reason")
-    public void save(@RequestBody CallReason callReason) {
-        callReasonService.save(callReason);
+    public ResponseEntity save(@RequestBody CallReason callReason) {
+        return ResponseEntity.ok(callReasonService.save(callReason));
     }
 }
