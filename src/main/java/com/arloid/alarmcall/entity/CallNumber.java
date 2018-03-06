@@ -1,40 +1,32 @@
 package com.arloid.alarmcall.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import lombok.Getter;
-import lombok.Setter;
-
+@Data
 @Entity
+@NoArgsConstructor
 public class CallNumber implements Serializable {
 
     private static final long serialVersionUID = 483218656277389060L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter private Long id;
+    private Long id;
 
     @ManyToOne
-    @Getter @Setter private Client client;
+    private Client client;
 
     @Column(nullable = false)
-    @Getter @Setter private String number;
+    private String number;
 
     @Column(nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @Getter private Date creation;
-
-    public CallNumber() {}
+    private Date creation;
 
     public CallNumber(long id) {
         if (id <= 0) {
