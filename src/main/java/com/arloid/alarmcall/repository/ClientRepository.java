@@ -1,4 +1,4 @@
-package com.arloid.alarmcall.service;
+package com.arloid.alarmcall.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

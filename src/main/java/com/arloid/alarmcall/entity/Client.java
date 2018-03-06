@@ -1,21 +1,17 @@
 package com.arloid.alarmcall.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
+@NoArgsConstructor
 public class Client implements Serializable {
 
     private static final long serialVersionUID = 1205794308713377888L;
@@ -31,13 +27,11 @@ public class Client implements Serializable {
     private String lastName;
 
     @Column
-    private boolean proof;
+    private Boolean proof;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date registered;
-
-    public Client() {}
 
     public Client(long id) {
         if (id <= 0) {
