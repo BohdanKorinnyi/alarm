@@ -7,7 +7,6 @@ import org.springframework.data.repository.Repository;
 import com.arloid.alarmcall.entity.CallNumber;
 
 public interface CallNumberRepository extends Repository<CallNumber, Long> {
-
     Page<CallNumber> findAll(Pageable pageable);
 
     CallNumber save(CallNumber callNumber);
