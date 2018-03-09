@@ -217,4 +217,10 @@
     <changeSet id="1520376853849" author="bkorinnyi">
         <addDefaultValue tableName="client" columnName="registered" defaultValue="now()"/>
     </changeSet>
+    <changeSet id="1520608006338" author="vkarpushchenko">
+        <dropColumn tableName="client" columnName="registered"/>
+        <addColumn tableName="client">
+            <column name="registered" type="DATETIME" defaultValue="now()"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
