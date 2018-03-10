@@ -33,7 +33,6 @@ public class CallServiceImpl implements CallService {
         }
         Call call = new Call();
         call.setCallNumber(callNumber);
-        call.setCreated(callDto.getCreated());
         call.setUpdated(callDto.getUpdated());
         call.setProvider(callDto.getProvider());
         call.setFullyListened(callDto.getFullyListened());

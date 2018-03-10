@@ -19,7 +19,7 @@ public class CallStatusController {
 
     @GetMapping
     @ApiOperation(value = "Get all statuses")
-    public ResponseEntity findAll() {
+    public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(callStatusService.findAll());
     }
 

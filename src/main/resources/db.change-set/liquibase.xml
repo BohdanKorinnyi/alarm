@@ -223,4 +223,15 @@
             <column name="registered" type="DATETIME" defaultValue="now()"/>
         </addColumn>
     </changeSet>
+    <changeSet id="1520664140745" author="vkarpushchenko">
+        <dropColumn tableName="call" columnName="created"/>
+        <addColumn tableName="call">
+            <column name="creation" type="DATETIME" defaultValue="now()"/>
+        </addColumn>
+        <addColumn tableName="client">
+            <column name="external_id" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

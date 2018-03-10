@@ -20,9 +20,18 @@ public class Call implements Serializable {
     @ManyToOne
     private CallNumber callNumber;
 
+    @ManyToOne
+    private Alarm alarm;
+
+    @ManyToOne
+    private CallReason callReason;
+
+    @ManyToOne
+    private CallStatus callStatus;
+
     @Column(nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created;
+    private Date creation;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)

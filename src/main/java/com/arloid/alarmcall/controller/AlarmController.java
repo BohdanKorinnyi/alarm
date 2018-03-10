@@ -23,27 +23,27 @@ public class AlarmController {
 
     @GetMapping
     @ApiOperation(value = "Get all alarms")
-    public ResponseEntity findAll(@RequestParam @ApiParam(name = "Page number", defaultValue = "1") int page,
+    public ResponseEntity<?> findAll(@RequestParam @ApiParam(name = "Page number", defaultValue = "1") int page,
                                   @RequestParam @ApiParam(name = "Elements on page", defaultValue = "20") int size) {
         return ResponseEntity.ok(alarmService.findAll(new PageRequest(--page, size)));
     }
 
     @GetMapping("{alarmIds}")
     @ApiOperation(value = "Get alarms by ids")
-    public ResponseEntity findByIds(@PathVariable List<Long> alarmIds, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> findByIds(@PathVariable List<Long> alarmIds, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(alarmService.findByIds(alarmIds, new PageRequest(--page, size)));
     }
 
     @GetMapping("client/{clientId}")
     @ApiOperation(value = "Get alarms by client id")
-    public ResponseEntity findByClientId(@PathVariable long clientId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> findByClientId(@PathVariable long clientId, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(alarmService.findByClientId(clientId, new PageRequest(--page, size)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Save a new alarm")
-    public ResponseEntity save(@RequestBody @ApiParam(value = "A new alarm object", required = true) Alarm alarm) {
+    public ResponseEntity<?> save(@RequestBody @ApiParam(value = "A new alarm object", required = true) Alarm alarm) {
         return ResponseEntity.ok(alarmService.save(alarm));
     }
 

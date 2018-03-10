@@ -19,14 +19,14 @@ public class CallReasonController {
 
     @GetMapping
     @ApiOperation(value = "Get all reasons")
-    public ResponseEntity findAll() {
+    public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(callReasonService.findAll());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new reason")
-    public ResponseEntity save(@RequestBody CallReason callReason) {
+    public ResponseEntity<?> save(@RequestBody CallReason callReason) {
         return ResponseEntity.ok(callReasonService.save(callReason));
     }
 }

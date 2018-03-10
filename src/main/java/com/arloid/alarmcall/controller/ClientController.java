@@ -15,13 +15,13 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping
-    public ResponseEntity findAll(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> findAll(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(clientService.findAll(page, size));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity save(@RequestBody Client client) {
+    public ResponseEntity<?> save(@RequestBody Client client) {
         return ResponseEntity.ok(clientService.save(client));
     }
 }

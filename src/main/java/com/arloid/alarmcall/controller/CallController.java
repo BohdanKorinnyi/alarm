@@ -1,7 +1,6 @@
 package com.arloid.alarmcall.controller;
 
 import com.arloid.alarmcall.dto.CallDto;
-import com.arloid.alarmcall.entity.Call;
 import com.arloid.alarmcall.service.CallService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,20 +19,20 @@ public class CallController {
 
     @GetMapping
     @ApiOperation(value = "Get all calls")
-    public ResponseEntity findAll(@RequestParam int size, @RequestParam int page) {
+    public ResponseEntity<?> findAll(@RequestParam int size, @RequestParam int page) {
         return ResponseEntity.ok(callService.findAll(size, page));
     }
 
     @GetMapping("number/{numberId}")
     @ApiOperation(value = "Get all calls by number ID")
-    public ResponseEntity findByCallNumberId(@PathVariable long numberId, @RequestParam int size, @RequestParam int page) {
+    public ResponseEntity<?> findByCallNumberId(@PathVariable long numberId, @RequestParam int size, @RequestParam int page) {
         return ResponseEntity.ok(callService.findByCallNumberId(numberId, size, page));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new call")
-    public ResponseEntity save(@RequestBody CallDto call) {
+    public ResponseEntity<?> save(@RequestBody CallDto call) {
         return ResponseEntity.ok(callService.save(call));
     }
 }
