@@ -2,7 +2,6 @@ package com.arloid.alarmcall.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,6 +27,9 @@ public class CallNumber implements Serializable {
     @Column(nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creation;
+
+    @Column
+    private Boolean active;
 
     public CallNumber(long id) {
         if (id <= 0) {

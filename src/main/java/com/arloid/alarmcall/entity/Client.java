@@ -29,9 +29,13 @@ public class Client implements Serializable {
     @Column
     private Boolean proof;
 
-    @Column(insertable = false)
+    @Column(insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date registered;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated;
 
     public Client(long id) {
         if (id <= 0) {
