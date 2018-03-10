@@ -3,6 +3,10 @@ package com.arloid.alarmcall.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -27,6 +31,7 @@ public class Call implements Serializable {
     private CallReason callReason;
 
     @ManyToOne
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private CallStatus callStatus;
 
     @Column(nullable = false, insertable = false, updatable = false)
