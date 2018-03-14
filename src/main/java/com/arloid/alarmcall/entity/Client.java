@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+
+import org.hibernate.envers.Audited;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -27,6 +30,7 @@ public class Client implements Serializable {
     private String lastName;
 
     @Column
+    @Audited
     private Boolean proof;
 
     @Column(insertable = false, updatable = false)
