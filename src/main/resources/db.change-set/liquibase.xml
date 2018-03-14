@@ -234,4 +234,9 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="1521063619784" author="vkarpushchenko">
+        <addNotNullConstraint columnName="registered" tableName="client"/>
+        <dropColumn columnName="call_reason_id" tableName="call"/>
+        <dropTable tableName="call_reason"/>
+    </changeSet>
 </databaseChangeLog>

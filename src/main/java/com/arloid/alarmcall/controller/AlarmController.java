@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +34,7 @@ public class AlarmController {
 
     @GetMapping("{alarmIds}")
     @ApiOperation(value = "Get alarms by ids")
-    public ResponseEntity<?> findByIds(@PathVariable List<Long> alarmIds, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<Page<Alarm>> findByIds(@PathVariable List<Long> alarmIds, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(alarmService.findByIds(alarmIds, new PageRequest(--page, size)));
     }
 
@@ -46,7 +47,7 @@ public class AlarmController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Save a new alarm")
-    public ResponseEntity<?> save(@RequestBody @ApiParam(value = "A new alarm object", required = true) Alarm alarm) {
+    public ResponseEntity<Alarm> save(@RequestBody @ApiParam(value = "A new alarm object", required = true) Alarm alarm) {
         return ResponseEntity.ok(alarmService.save(alarm));
     }
 
