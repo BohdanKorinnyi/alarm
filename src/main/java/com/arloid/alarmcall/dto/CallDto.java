@@ -11,10 +11,4 @@ import java.util.Date;
 public class CallDto {
     private long id;
     private long callNumberId;
-    private Date created;
-    private Date updated;
-    private String provider;
-    private Boolean fullyListened;
-    private Integer duration;
-    private BigDecimal cost;
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("numbers")
-@Api(description = "Operations with phone numbers")
+@Api(tags = "Actions with call numbers")
 public class CallNumberController {
     private final CallNumberService callNumberService;
 
@@ -24,8 +24,8 @@ public class CallNumberController {
 
     @GetMapping("client/{clientId}")
     @ApiOperation(value = "Get all client's phone numbers")
-    public ResponseEntity<?> findByClientId(@PathVariable long clientId, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(callNumberService.findByClientId(clientId, page, size));
+    public ResponseEntity<?> findByClientId(@PathVariable long clientId) {
+        return ResponseEntity.ok(callNumberService.findByClientId(clientId));
     }
 
     @PostMapping

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 
+import java.util.Optional;
+
 public interface ClientRepository extends Repository<Client, Long> {
     Client findOne(Long id);
 

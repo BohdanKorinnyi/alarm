@@ -13,5 +13,5 @@ public interface CallNumberRepository extends Repository<CallNumber, Long> {
 
     CallNumber save(CallNumber callNumber);
 
-    Page<CallNumber> findByClientId(long id, Pageable pageable);
+    CallNumber findByClientId(long clientId);
 }

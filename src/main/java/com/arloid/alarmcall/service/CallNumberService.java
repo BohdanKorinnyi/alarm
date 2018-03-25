@@ -11,5 +11,5 @@ public interface CallNumberService {
 
     CallNumber save(CallNumberDto callNumberDto);
 
-    Page<CallNumber> findByClientId(long id, int page, int size);
+    CallNumber findByClientId(long id);
 }

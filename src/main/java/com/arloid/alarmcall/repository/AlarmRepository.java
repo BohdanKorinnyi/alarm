@@ -14,5 +14,5 @@ public interface AlarmRepository extends Repository<Alarm, Long> {
 
     Alarm save(Alarm alarm);
 
-    Page<Alarm> findByClientId(long clientId, Pageable pageable);
+    Alarm findByClientId(long clientId);
 }
