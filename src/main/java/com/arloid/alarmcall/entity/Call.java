@@ -23,9 +23,6 @@ public class Call {
     private Alarm alarm;
 
     @ManyToOne
-    private CallReason callReason;
-
-    @ManyToOne
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private CallStatus callStatus;
 

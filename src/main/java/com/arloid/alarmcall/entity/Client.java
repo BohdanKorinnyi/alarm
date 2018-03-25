@@ -31,4 +31,7 @@ public class Client implements Serializable {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated;
+
+    @Column(nullable = false)
+    private String externalId;
 }

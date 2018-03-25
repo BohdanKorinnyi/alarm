@@ -1,10 +1,13 @@
 package com.arloid.alarmcall.controller;
 
 import com.arloid.alarmcall.dto.CallNumberDto;
+import com.arloid.alarmcall.entity.CallNumber;
 import com.arloid.alarmcall.service.CallNumberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,7 @@ public class CallNumberController {
 
     @GetMapping
     @ApiOperation(value = "Get all phone numbers")
-    public ResponseEntity<?> findAll(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<Page<CallNumber>> findAll(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(callNumberService.findAll(page, size));
     }
 
@@ -31,7 +34,7 @@ public class CallNumberController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a new phone number")
-    public ResponseEntity<?> save(@RequestBody CallNumberDto callNumberDto) {
+    public ResponseEntity<CallNumber> save(@RequestBody CallNumberDto callNumberDto) {
         return ResponseEntity.ok(callNumberService.save(callNumberDto));
     }
 }

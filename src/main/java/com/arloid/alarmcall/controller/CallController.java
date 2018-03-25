@@ -1,16 +1,13 @@
 package com.arloid.alarmcall.controller;
 
+import com.arloid.alarmcall.entity.Call;
 import com.arloid.alarmcall.service.CallService;
-import com.twilio.rest.api.v2010.account.Call;
-import com.twilio.type.PhoneNumber;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 
 @RestController
 @AllArgsConstructor
@@ -22,13 +19,13 @@ public class CallController {
 
     @GetMapping
     @ApiOperation(value = "Get all calls")
-    public ResponseEntity<?> findAll(@RequestParam int size, @RequestParam int page) {
+    public ResponseEntity<Page<Call>> findAll(@RequestParam int size, @RequestParam int page) {
         return ResponseEntity.ok(callService.findAll(size, page));
     }
 
     @GetMapping("number/{numberId}")
     @ApiOperation(value = "Get all calls by number ID")
-    public ResponseEntity<?> findByCallNumberId(@PathVariable long numberId, @RequestParam int size, @RequestParam int page) {
+    public ResponseEntity<Page<Call>> findByCallNumberId(@PathVariable long numberId, @RequestParam int size, @RequestParam int page) {
         return ResponseEntity.ok(callService.findByCallNumberId(numberId, size, page));
     }
 
