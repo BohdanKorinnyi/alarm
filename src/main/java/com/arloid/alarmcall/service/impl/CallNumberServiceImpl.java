@@ -38,14 +38,14 @@ public class CallNumberServiceImpl implements CallNumberService {
         }
         CallNumber callNumber = new CallNumber();
         callNumber.setClient(client);
-        callNumber.setCreation(callNumberDto.getCreation());
         callNumber.setNumber(callNumberDto.getNumber());
+        callNumber.setActive(true);
         return callNumberRepository.save(callNumber);
     }
 
     @Override
-    public Page<CallNumber> findByClientId(long clientId, int page, int size) {
-        return callNumberRepository.findByClientId(clientId, createPageable(page, size));
+    public CallNumber findByClientId(long clientId) {
+        return callNumberRepository.findByClientId(clientId);
     }
 
     private Pageable createPageable(int page, int size) {

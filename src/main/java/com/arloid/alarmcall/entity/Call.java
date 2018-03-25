@@ -1,21 +1,16 @@
 package com.arloid.alarmcall.entity;
 
 import lombok.Data;
-
-import javax.persistence.*;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import java.io.Serializable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
 @Entity
-public class Call implements Serializable {
-
-    private static final long serialVersionUID = 3443583048152724965L;
+public class Call {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

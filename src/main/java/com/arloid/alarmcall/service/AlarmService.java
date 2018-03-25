@@ -1,5 +1,6 @@
 package com.arloid.alarmcall.service;
 
+import com.amazonaws.services.s3.model.S3Object;
 import com.arloid.alarmcall.entity.Alarm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,5 +14,7 @@ public interface AlarmService {
 
     Alarm save(Alarm alarm);
 
-    Page<Alarm> findByClientId(long id, Pageable pageable);
+    Alarm findByClientId(long clientId);
+
+    S3Object getAlarmFromS3(String key);
 }

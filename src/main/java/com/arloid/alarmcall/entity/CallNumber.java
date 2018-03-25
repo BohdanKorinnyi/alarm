@@ -17,32 +17,13 @@ public class CallNumber implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
+    @OneToOne
     private Client client;
-
     @Column(nullable = false)
     private String number;
-
     @Column(nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creation;
-
     @Column
     private Boolean active;
-
-    public CallNumber(long id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("id must not be lower or equal zero");
-        }
-        this.id = id;
-    }
-
-    public CallNumber(long id, Client client) {
-        this(id);
-        if (client == null) {
-            throw new IllegalArgumentException("client must not be null");
-        }
-        this.client = client;
-    }
 }
