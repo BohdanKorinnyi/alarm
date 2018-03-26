@@ -1,7 +1,10 @@
 package com.arloid.alarmcall.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import com.arloid.alarmcall.configuration.AmazonS3Configuration;
 import com.arloid.alarmcall.service.S3Service;
 import lombok.AllArgsConstructor;
@@ -41,11 +44,11 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public String upload(File file) {
         try {
-            PutObjectResult result = amazonS3.putObject(new PutObjectRequest(amazonS3Configuration.getBucket(), file.getPath(), file));
+            amazonS3.putObject(new PutObjectRequest(amazonS3Configuration.getBucket(), file.getPath(), file));
             return amazonS3.getUrl(amazonS3Configuration.getBucket(), file.getPath()).toString();
         } catch (Exception e) {
             log.error("error occurred during uploading", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error occurred during uploading alarm");
         }
     }
 

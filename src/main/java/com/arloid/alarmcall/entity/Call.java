@@ -11,38 +11,31 @@ import java.util.Date;
 @Data
 @Entity
 public class Call {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
+    @OneToOne
     private CallNumber callNumber;
-
-    @ManyToOne
+    @OneToOne
     private Alarm alarm;
-
     @ManyToOne
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private CallStatus callStatus;
-
     @Column(nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creation;
-
     @Column
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated;
-
     @Column(nullable = false)
     private String provider;
-
     @Column(name = "listened_full", nullable = false)
     private Boolean fullyListened;
-
     @Column
     private Integer duration;
-
     @Column
     private BigDecimal cost;
+    @Column
+    private String providerId;
 }

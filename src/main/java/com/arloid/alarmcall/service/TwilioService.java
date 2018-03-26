@@ -1,7 +1,11 @@
 package com.arloid.alarmcall.service;
 
-public interface TwilioService {
-    String makeCall(String number, String twiMlUrl);
+import com.twilio.rest.api.v2010.account.Call;
 
-    String createTwiMlByMessage(String message);
+public interface TwilioService {
+    Call makeCall(String number, String twiMlUrl);
+
+    String buildSayResponse(String message);
+
+    String buildPlayResponse(String message);
 }

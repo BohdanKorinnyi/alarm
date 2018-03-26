@@ -13,4 +13,6 @@ public interface ClientRepository extends Repository<Client, Long> {
     Page<Client> findAll(Pageable pageable);
 
     Client save(Client client);
+
+    Client findByExternalId(String externalId);
 }

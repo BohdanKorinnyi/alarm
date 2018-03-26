@@ -8,7 +8,7 @@ public interface CallService {
 
     Page<Call> findByCallNumberId(long callNumberId, int page, int size);
 
-    Call makeByClientId(long clientId);
+    void makeByClientId(long clientId);
 
-    Call makeByPhoneNumberId(long phoneNumberId);
+    void update(com.twilio.rest.api.v2010.account.Call call);
 }

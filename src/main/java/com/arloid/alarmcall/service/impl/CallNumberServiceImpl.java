@@ -1,6 +1,6 @@
 package com.arloid.alarmcall.service.impl;
 
-import com.arloid.alarmcall.dto.CallNumberDto;
+import com.arloid.alarmcall.dto.RegistrationDto;
 import com.arloid.alarmcall.entity.CallNumber;
 import com.arloid.alarmcall.entity.Client;
 import com.arloid.alarmcall.repository.CallNumberRepository;
@@ -31,14 +31,14 @@ public class CallNumberServiceImpl implements CallNumberService {
     }
 
     @Override
-    public CallNumber save(CallNumberDto callNumberDto) {
-        Client client = clientService.findOne(callNumberDto.getClientId());
+    public CallNumber save(RegistrationDto.Phone phone, long clientId) {
+        Client client = clientService.findOne(clientId);
         if (isNull(client)) {
-            throw new IllegalArgumentException("The following client id '" + callNumberDto.getClientId() + "' doesn't exist");
+            throw new IllegalArgumentException("The following client id '" + clientId + "' doesn't exist");
         }
         CallNumber callNumber = new CallNumber();
         callNumber.setClient(client);
-        callNumber.setNumber(callNumberDto.getNumber());
+        callNumber.setNumber(phone.getNumber());
         callNumber.setActive(true);
         return callNumberRepository.save(callNumber);
     }
