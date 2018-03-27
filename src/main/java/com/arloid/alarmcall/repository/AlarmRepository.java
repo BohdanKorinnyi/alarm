@@ -10,8 +10,6 @@ import java.util.List;
 public interface AlarmRepository extends Repository<Alarm, Long> {
     Page<Alarm> findAll(Pageable pageable);
 
-    Page<Alarm> findByIdIn(List<Long> ids, Pageable pageable);
-
     Alarm save(Alarm alarm);
 
     Alarm findByClientId(long clientId);

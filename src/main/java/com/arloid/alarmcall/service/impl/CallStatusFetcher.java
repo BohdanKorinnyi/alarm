@@ -15,28 +15,26 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Component
 @AllArgsConstructor
 public class CallStatusFetcher {
-    private static ConcurrentLinkedQueue<String> CALL_SIDS = new ConcurrentLinkedQueue<>();
+    private static ConcurrentLinkedQueue<String> callSids = new ConcurrentLinkedQueue<>();
     private final CallService callService;
 
     @SneakyThrows
     @Scheduled(fixedRate = 2000L)
     public void fetchStatus() {
-        if (CollectionUtils.isEmpty(CALL_SIDS)) {
-            log.info("No calls for update");
+        if (CollectionUtils.isEmpty(callSids)) {
             return;
         }
-        log.info("Getting status for ids {}", CALL_SIDS);
-        CALL_SIDS.forEach(id -> {
+        callSids.forEach(id -> {
             Call call = Call.fetcher(id).fetch();
             callService.update(call);
         });
     }
 
     public static void add(String callId) {
-        CALL_SIDS.add(callId);
+        callSids.add(callId);
     }
 
     public static void remove(String callId) {
-        CALL_SIDS.remove(callId);
+        callSids.remove(callId);
     }
 }

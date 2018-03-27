@@ -34,6 +34,6 @@ public class Alarm implements Serializable {
     private Date creation;
 
     public enum AlarmRecordType {
-        LINK, TEXT;
+        LINK, SPEECH;
     }
 }
