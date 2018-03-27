@@ -4,9 +4,11 @@ import com.arloid.alarmcall.service.AlarmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @AllArgsConstructor
@@ -19,6 +21,15 @@ public class AlarmController {
     @ApiOperation(value = "Get alarms by client id")
     public ResponseEntity findByClientId(@PathVariable long clientId) {
         return ResponseEntity.ok(alarmService.findByClientId(clientId));
+    }
+
+
+    @PostMapping("upload/{smartHouseClientId}")
+    public ResponseEntity uploadVoiceAlarmFile(@RequestParam("file") MultipartFile file, String smartHouseClientId) {
+        if (file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(alarmService.upload(file, smartHouseClientId));
     }
 
     @PostMapping(value = "{clientId}", produces = MediaType.TEXT_XML_VALUE)

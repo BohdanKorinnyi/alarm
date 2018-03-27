@@ -10,9 +10,9 @@ import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
-import java.net.URI;
 
 @Service
 @RequiredArgsConstructor
@@ -28,11 +28,10 @@ public class TwilioServiceImpl implements TwilioService {
 
     @Override
     @SneakyThrows
-    public Call makeCall(String toNumber, String twiMlUrl) {
-        Call call = Call.creator(new PhoneNumber(toNumber), fromNumber,
-                new URI(twilioProperties.getAlarmEndpoint() + twiMlUrl))
+    public Call makeCall(String toNumber, long clientId) {
+        return Call.creator(new PhoneNumber(toNumber), fromNumber,
+                UriComponentsBuilder.fromHttpUrl(twilioProperties.getAlarmEndpoint() + clientId).build().toUri())
                 .create();
-        return call;
     }
 
     @Override

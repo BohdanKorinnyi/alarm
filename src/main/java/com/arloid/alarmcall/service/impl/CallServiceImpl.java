@@ -26,6 +26,13 @@ public class CallServiceImpl implements CallService {
     private final CallNumberService callNumberService;
     private final CallStatusService callStatusService;
 
+    private static final Set<com.twilio.rest.api.v2010.account.Call.Status> END_CALL = ImmutableSet.of(
+            com.twilio.rest.api.v2010.account.Call.Status.BUSY,
+            com.twilio.rest.api.v2010.account.Call.Status.NO_ANSWER,
+            com.twilio.rest.api.v2010.account.Call.Status.CANCELED,
+            com.twilio.rest.api.v2010.account.Call.Status.FAILED
+    );
+
     @Override
     public Page<Call> findAll(int size, int page) {
         return callRepository.findAll(createPageable(page, size));
@@ -45,18 +52,11 @@ public class CallServiceImpl implements CallService {
         call.setCallNumber(number);
         call.setCallStatus(callStatusService.findByName("created"));
         callRepository.save(call);
-        com.twilio.rest.api.v2010.account.Call twilioCall = twilioService.makeCall(number.getNumber(), alarm.getNameRecord());
+        com.twilio.rest.api.v2010.account.Call twilioCall = twilioService.makeCall(number.getNumber(), clientId);
         call.setProviderId(twilioCall.getSid());
         callRepository.save(call);
         CallStatusFetcher.add(twilioCall.getSid());
     }
-
-    private static final Set<com.twilio.rest.api.v2010.account.Call.Status> END_CALL = ImmutableSet.of(
-            com.twilio.rest.api.v2010.account.Call.Status.BUSY,
-            com.twilio.rest.api.v2010.account.Call.Status.NO_ANSWER,
-            com.twilio.rest.api.v2010.account.Call.Status.CANCELED,
-            com.twilio.rest.api.v2010.account.Call.Status.FAILED
-    );
 
     @Override
     public void update(com.twilio.rest.api.v2010.account.Call call) {

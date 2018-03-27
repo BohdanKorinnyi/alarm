@@ -5,9 +5,11 @@ import com.arloid.alarmcall.entity.Client;
 import com.arloid.alarmcall.exception.SaveExistingEntityException;
 import com.arloid.alarmcall.repository.AlarmRepository;
 import com.arloid.alarmcall.service.AlarmService;
+import com.arloid.alarmcall.service.S3Service;
 import com.arloid.alarmcall.service.TwilioService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import static java.util.Objects.nonNull;
 
@@ -15,6 +17,7 @@ import static java.util.Objects.nonNull;
 @AllArgsConstructor
 public class AlarmServiceImpl implements AlarmService {
     private final TwilioService twilioService;
+    private final S3Service s3Service;
     private final AlarmRepository alarmRepository;
 
     @Override
@@ -29,6 +32,11 @@ public class AlarmServiceImpl implements AlarmService {
         alarm.setAddressRecord(data);
         alarm.setActive(true);
         return alarmRepository.save(alarm);
+    }
+
+    @Override
+    public String upload(MultipartFile multipartFile, String externalClientId) {
+        return s3Service.upload(multipartFile);
     }
 
     @Override

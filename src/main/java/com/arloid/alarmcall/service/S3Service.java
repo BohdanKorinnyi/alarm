@@ -2,6 +2,7 @@ package com.arloid.alarmcall.service;
 
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3Object;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface S3Service {
 
     ListObjectsV2Result findAllObjects(String bucket);
 
-    String upload(File file);
+    String upload(MultipartFile file);
 
     S3Object findObjectByKey(String key);
 }
