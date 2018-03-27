@@ -1,7 +1,8 @@
 package com.arloid.alarmcall.service.impl;
 
-import com.arloid.alarmcall.dto.ClientDto;
+import com.arloid.alarmcall.dto.RegistrationDto;
 import com.arloid.alarmcall.entity.Client;
+import com.arloid.alarmcall.exception.SaveExistingEntityException;
 import com.arloid.alarmcall.repository.ClientRepository;
 import com.arloid.alarmcall.service.ClientService;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client save(ClientDto clientDto) {
-        Client client = new Client();
-        client.setFirstName(clientDto.getFirstName());
-        client.setLastName(clientDto.getLastName());
+    public Client save(RegistrationDto.Client registrationClient) {
+        Client client = clientRepository.findByExternalId(registrationClient.getId());
+        if (nonNull(client)) {
+            throw new SaveExistingEntityException("Client with id " + registrationClient.getId() + " has already exist");
+        }
+        client = new Client();
+        client.setFirstName(registrationClient.getFirstName());
+        client.setLastName(registrationClient.getLastName());
+        client.setExternalId(registrationClient.getId());
         return clientRepository.save(client);
     }
 

@@ -3,6 +3,7 @@ package com.arloid.alarmcall.controller;
 import com.amazonaws.services.s3.model.S3Object;
 import com.arloid.alarmcall.entity.Alarm;
 import com.arloid.alarmcall.service.AlarmService;
+import com.arloid.alarmcall.service.S3Service;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -23,33 +24,34 @@ import java.util.List;
 @Api(tags = "Actions with alarms")
 public class AlarmController {
 
+    private final S3Service s3Service;
     private final AlarmService alarmService;
 
-    @GetMapping
-    @ApiOperation(value = "Get all alarms")
-    public ResponseEntity<?> findAll(@RequestParam @ApiParam(name = "Page number", defaultValue = "1") int page,
-                                     @RequestParam @ApiParam(name = "Elements on page", defaultValue = "20") int size) {
-        return ResponseEntity.ok(alarmService.findAll(new PageRequest(--page, size)));
-    }
+//    @GetMapping
+//    @ApiOperation(value = "Get all alarms")
+//    public ResponseEntity<?> findAll(@RequestParam @ApiParam(name = "Page number", defaultValue = "1") int page,
+//                                     @RequestParam @ApiParam(name = "Elements on page", defaultValue = "20") int size) {
+//        return ResponseEntity.ok(alarmService.findAll(new PageRequest(--page, size)));
+//    }
 
-    @GetMapping("{alarmIds}")
-    @ApiOperation(value = "Get alarms by ids")
-    public ResponseEntity<Page<Alarm>> findByIds(@PathVariable List<Long> alarmIds, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(alarmService.findByIds(alarmIds, new PageRequest(--page, size)));
-    }
+//    @GetMapping("{alarmIds}")
+//    @ApiOperation(value = "Get alarms by ids")
+//    public ResponseEntity<Page<Alarm>> findByIds(@PathVariable List<Long> alarmIds, @RequestParam int page, @RequestParam int size) {
+//        return ResponseEntity.ok(alarmService.findByIds(alarmIds, new PageRequest(--page, size)));
+//    }
 
     @GetMapping("client/{clientId}")
     @ApiOperation(value = "Get alarms by client id")
-    public ResponseEntity<?> findByClientId(@PathVariable long clientId) {
+    public ResponseEntity findByClientId(@PathVariable long clientId) {
         return ResponseEntity.ok(alarmService.findByClientId(clientId));
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Save a new alarm")
-    public ResponseEntity<Alarm> save(@RequestBody @ApiParam(value = "A new alarm object", required = true) Alarm alarm) {
-        return ResponseEntity.ok(alarmService.save(alarm));
-    }
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @ApiOperation(value = "Save a new alarm")
+//    public ResponseEntity<Alarm> save(@RequestBody @ApiParam(value = "A new alarm object", required = true) Alarm alarm) {
+//        return ResponseEntity.ok(alarmService.save(alarm));
+//    }
 
     @PostMapping("{key}")
     @ApiOperation(value = "Get alarm for Twilio from AWS S3")

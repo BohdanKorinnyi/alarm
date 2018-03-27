@@ -32,12 +32,7 @@ public class CallController {
     @PostMapping("client/{clientId}")
     @ApiOperation(value = "Make a call by client id")
     public ResponseEntity<?> makeToClient(@PathVariable long clientId) {
-        return ResponseEntity.ok(callService.makeByClientId(clientId));
-    }
-
-    @PostMapping("number/{phoneNumberId}")
-    @ApiOperation(value = "Make a call by phone number id")
-    public ResponseEntity<?> makeToNumber(@PathVariable long phoneNumberId) {
-        return ResponseEntity.ok(callService.makeByPhoneNumberId(phoneNumberId));
+        callService.makeByClientId(clientId);
+        return ResponseEntity.ok().build();
     }
 }

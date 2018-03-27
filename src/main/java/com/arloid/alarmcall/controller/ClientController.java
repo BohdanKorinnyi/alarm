@@ -29,13 +29,6 @@ public class ClientController {
         return ResponseEntity.ok(clientService.findAll(page, size));
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Create a new client")
-    public ResponseEntity<?> save(@RequestBody ClientDto client) {
-        return ResponseEntity.ok(clientService.save(client));
-    }
-
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Update the existing client")

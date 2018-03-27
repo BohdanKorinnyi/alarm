@@ -239,4 +239,49 @@
         <dropColumn columnName="call_reason_id" tableName="call"/>
         <dropTable tableName="call_reason"/>
     </changeSet>
+    <changeSet id="1522019887377" author="bkorinnyi">
+        <insert tableName="call_status">
+            <column name="id" value="1"></column>
+            <column name="value" value="created"></column>
+        </insert>
+        <insert tableName="call_status">
+            <column name="id" value="2"></column>
+            <column name="value" value="queued"></column>
+        </insert>
+        <insert tableName="call_status">
+            <column name="id" value="3"></column>
+            <column name="value" value="in-progress"></column>
+        </insert>
+        <insert tableName="call_status">
+            <column name="id" value="4"></column>
+            <column name="value" value="completed"></column>
+        </insert>
+        <insert tableName="call_status">
+            <column name="id" value="5"></column>
+            <column name="value" value="busy"></column>
+        </insert>
+        <insert tableName="call_status">
+            <column name="id" value="6"></column>
+            <column name="value" value="failed"></column>
+        </insert>
+        <insert tableName="call_status">
+            <column name="id" value="7"></column>
+            <column name="value" value="no-answer"></column>
+        </insert>
+        <insert tableName="call_status">
+            <column name="id" value="8"></column>
+            <column name="value" value="canceled"></column>
+        </insert>
+    </changeSet>
+    <changeSet id="1522019887380" author="bkorinnyi">
+        <addColumn tableName="call">
+            <column name="provider_id" type="varchar(128)"></column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1522019887388" author="bkorinnyi">
+        <insert tableName="call_status">
+            <column name="id" value="9"></column>
+            <column name="value" value="ringing"></column>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
