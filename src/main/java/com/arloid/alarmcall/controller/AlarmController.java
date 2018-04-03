@@ -23,7 +23,6 @@ public class AlarmController {
         return ResponseEntity.ok(alarmService.findByClientId(clientId));
     }
 
-
     @PostMapping("upload/{smartHouseClientId}")
     public ResponseEntity uploadVoiceAlarmFile(@RequestParam("file") MultipartFile file, String smartHouseClientId) {
         if (file.isEmpty()) {

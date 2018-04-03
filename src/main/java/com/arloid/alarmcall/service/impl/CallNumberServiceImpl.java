@@ -22,7 +22,7 @@ public class CallNumberServiceImpl implements CallNumberService {
 
     @Override
     public CallNumber findById(long callNumberId) {
-        return callNumberRepository.findOne(callNumberId);
+        return callNumberRepository.findById(callNumberId);
     }
 
     @Override

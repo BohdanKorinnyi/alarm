@@ -1,17 +1,10 @@
 package com.arloid.alarmcall.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.Repository;
-
 import com.arloid.alarmcall.entity.CallNumber;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CallNumberRepository extends Repository<CallNumber, Long> {
-    CallNumber findOne(long callNumberId);
-
-    Page<CallNumber> findAll(Pageable pageable);
-
-    CallNumber save(CallNumber callNumber);
+public interface CallNumberRepository extends JpaRepository<CallNumber, Long> {
+    CallNumber findById(long callNumberId);
 
     CallNumber findByClientId(long clientId);
 }

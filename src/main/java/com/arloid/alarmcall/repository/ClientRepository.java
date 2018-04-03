@@ -8,7 +8,7 @@ import org.springframework.data.repository.Repository;
 import java.util.Optional;
 
 public interface ClientRepository extends Repository<Client, Long> {
-    Client findOne(Long id);
+    Client findById(Long id);
 
     Page<Client> findAll(Pageable pageable);
 

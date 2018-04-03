@@ -12,9 +12,6 @@ import java.util.Date;
 @Setter
 @Getter
 public class Alarm implements Serializable {
-
-    private static final long serialVersionUID = -4523821848782864384L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,6 +29,8 @@ public class Alarm implements Serializable {
     @Column(nullable = false, insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creation;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Language language;
 
     public enum AlarmRecordType {
         LINK, SPEECH;

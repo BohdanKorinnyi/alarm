@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class RegistrationVoiceAlarmDto {
     private String url;
+    private String languageCode;
 }

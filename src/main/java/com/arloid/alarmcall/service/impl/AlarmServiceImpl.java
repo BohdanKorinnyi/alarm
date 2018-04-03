@@ -2,6 +2,7 @@ package com.arloid.alarmcall.service.impl;
 
 import com.arloid.alarmcall.entity.Alarm;
 import com.arloid.alarmcall.entity.Client;
+import com.arloid.alarmcall.entity.Language;
 import com.arloid.alarmcall.exception.SaveExistingEntityException;
 import com.arloid.alarmcall.repository.AlarmRepository;
 import com.arloid.alarmcall.service.AlarmService;
@@ -21,7 +22,7 @@ public class AlarmServiceImpl implements AlarmService {
     private final AlarmRepository alarmRepository;
 
     @Override
-    public Alarm save(Client client, Alarm.AlarmRecordType type, String data) {
+    public Alarm save(Client client, Alarm.AlarmRecordType type, String data, Language language) {
         Alarm alarm = alarmRepository.findByClientId(client.getId());
         if (nonNull(alarm)) {
             throw new SaveExistingEntityException("You can't create a new alarm for client " + client.getId() + ". Please, update existing alarm if you need.");
@@ -31,6 +32,7 @@ public class AlarmServiceImpl implements AlarmService {
         alarm.setClient(client);
         alarm.setAddressRecord(data);
         alarm.setActive(true);
+        alarm.setLanguage(language);
         return alarmRepository.save(alarm);
     }
 
@@ -48,8 +50,8 @@ public class AlarmServiceImpl implements AlarmService {
     public String findTwiMlByClient(long clientId) {
         Alarm alarm = alarmRepository.findByClientId(clientId);
         if (alarm.getType() == Alarm.AlarmRecordType.SPEECH) {
-            return twilioService.buildSayResponse(alarm.getAddressRecord());
+            return twilioService.buildSayResponse(alarm.getAddressRecord(), alarm.getLanguage());
         }
-        return twilioService.buildPlayResponse(alarm.getAddressRecord());
+        return twilioService.buildPlayResponse(alarm.getAddressRecord(), alarm.getLanguage());
     }
 }

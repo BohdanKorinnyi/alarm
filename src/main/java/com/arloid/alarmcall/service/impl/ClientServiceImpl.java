@@ -20,7 +20,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client findOne(Long clientId) {
-        return clientRepository.findOne(clientId);
+        return clientRepository.findById(clientId);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void update(Client client) {
-        Client existingClient = clientRepository.findOne(client.getId());
+        Client existingClient = clientRepository.findById(client.getId());
         if (nonNull(existingClient)) {
             clientRepository.save(client);
         }

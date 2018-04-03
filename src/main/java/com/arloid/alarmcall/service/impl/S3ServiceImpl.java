@@ -47,7 +47,8 @@ public class S3ServiceImpl implements S3Service {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
             metadata.setContentType(file.getContentType());
-            amazonS3.putObject(new PutObjectRequest(amazonS3Configuration.getBucket(), fileKey, file.getInputStream(), metadata));
+            amazonS3.putObject(new PutObjectRequest(amazonS3Configuration.getBucket(), fileKey, file.getInputStream(), metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
             return amazonS3.getUrl(amazonS3Configuration.getBucket(), fileKey).toString();
         } catch (Exception e) {
             log.error("error occurred during uploading", e);

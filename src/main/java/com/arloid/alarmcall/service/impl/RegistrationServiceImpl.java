@@ -5,10 +5,7 @@ import com.arloid.alarmcall.dto.RegistrationSpeechAlarmDto;
 import com.arloid.alarmcall.dto.RegistrationVoiceAlarmDto;
 import com.arloid.alarmcall.entity.Alarm;
 import com.arloid.alarmcall.entity.Client;
-import com.arloid.alarmcall.service.AlarmService;
-import com.arloid.alarmcall.service.CallNumberService;
-import com.arloid.alarmcall.service.ClientService;
-import com.arloid.alarmcall.service.RegistrationService;
+import com.arloid.alarmcall.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +15,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final AlarmService alarmService;
     private final ClientService clientService;
     private final CallNumberService callNumberService;
+    private final LanguageService languageService;
 
     @Override
     public Client register(RegistrationDto registration) {
@@ -25,10 +23,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         callNumberService.save(registration.getPhone(), client.getId());
         if (registration.getAlarm() instanceof RegistrationSpeechAlarmDto) {
             RegistrationSpeechAlarmDto alarm = (RegistrationSpeechAlarmDto) registration.getAlarm();
-            alarmService.save(client, Alarm.AlarmRecordType.SPEECH, alarm.getMessage());
+            alarmService.save(client, Alarm.AlarmRecordType.SPEECH, alarm.getMessage(), languageService.findByCode(alarm.getLanguageCode()));
         } else if (registration.getAlarm() instanceof RegistrationVoiceAlarmDto) {
             RegistrationVoiceAlarmDto alarm = (RegistrationVoiceAlarmDto) registration.getAlarm();
-            alarmService.save(client, Alarm.AlarmRecordType.LINK, alarm.getUrl());
+            alarmService.save(client, Alarm.AlarmRecordType.LINK, alarm.getUrl(), languageService.findByCode(alarm.getLanguageCode()));
         }
         return client;
     }
