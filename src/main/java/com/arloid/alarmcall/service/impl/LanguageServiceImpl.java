@@ -1,6 +1,6 @@
 package com.arloid.alarmcall.service.impl;
 
-import com.arloid.alarmcall.controller.LanguageDto;
+import com.arloid.alarmcall.dto.LanguageDto;
 import com.arloid.alarmcall.entity.Language;
 import com.arloid.alarmcall.exception.BadLanguageQualifierException;
 import com.arloid.alarmcall.exception.EmptyLanguageIntroException;

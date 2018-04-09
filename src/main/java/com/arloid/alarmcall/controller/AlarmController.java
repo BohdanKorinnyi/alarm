@@ -24,7 +24,9 @@ public class AlarmController {
     }
 
     @PostMapping("upload/{smartHouseClientId}")
-    public ResponseEntity uploadVoiceAlarmFile(@RequestParam("file") MultipartFile file, String smartHouseClientId) {
+    @ApiOperation(value = "Upload the alarm audio file")
+    public ResponseEntity uploadVoiceAlarmFile(
+            @RequestParam("file") MultipartFile file, String smartHouseClientId) {
         if (file.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -32,7 +34,7 @@ public class AlarmController {
     }
 
     @PostMapping(value = "{clientId}", produces = MediaType.TEXT_XML_VALUE)
-    @ApiOperation(value = "Get Twilio alarm")
+    @ApiOperation(value = "Get TwiMl by client id")
     public String getTwiMlAlarm(@PathVariable long clientId) {
         return alarmService.findTwiMlByClient(clientId);
     }

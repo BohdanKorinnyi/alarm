@@ -22,13 +22,13 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     @PostMapping("speech")
-    @ApiOperation("Register a new client with speech alarm")
+    @ApiOperation("Register a new client with text alarm")
     public ResponseEntity registerSpeech(@RequestBody @ApiParam("Message is required for speech alarm") RegistrationDto<RegistrationSpeechAlarmDto> registration) {
         return ResponseEntity.ok(registrationService.register(registration));
     }
 
     @PostMapping("voice")
-    @ApiOperation("Register a new client with voice alarm")
+    @ApiOperation("Register a new client with audio alarm")
     public ResponseEntity registerVoice(@RequestBody @ApiParam("Record URL is required for voice alarm") RegistrationDto<RegistrationVoiceAlarmDto> registration) {
         return ResponseEntity.ok(registrationService.register(registration));
     }

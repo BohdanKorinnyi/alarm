@@ -24,7 +24,7 @@ public class CallController {
     }
 
     @GetMapping("number/{numberId}")
-    @ApiOperation(value = "Get all calls by number ID")
+    @ApiOperation(value = "Get all calls by number id")
     public ResponseEntity<Page<Call>> findByCallNumberId(@PathVariable long numberId, @RequestParam int size, @RequestParam int page) {
         return ResponseEntity.ok(callService.findByCallNumberId(numberId, size, page));
     }

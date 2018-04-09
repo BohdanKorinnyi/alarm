@@ -1,4 +1,4 @@
-package com.arloid.alarmcall.controller;
+package com.arloid.alarmcall.dto;
 
 import lombok.Getter;
 import lombok.Setter;

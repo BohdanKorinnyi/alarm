@@ -17,5 +17,4 @@ public class ExceptionControllerAdvice {
     public void handleSaveExistingEntityException(SaveExistingEntityException ex, HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value());
     }
-
 }
