@@ -26,3 +26,5 @@ nbdist/
 /.mvn/
 /mvnw.cmd
 /mvnw
+/src/main/frontend/node_modules/
+/src/main/frontend/e2e/
