@@ -14,24 +14,24 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class Client implements Serializable {
-    private static final long serialVersionUID = 1205794308713377888L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column
-    private String firstName;
-    @Column
-    private String lastName;
-    @Column
-    @Audited
-    private Boolean proof;
-    @Column(insertable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date registered;
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updated;
+  private static final long serialVersionUID = 1205794308713377888L;
 
-    @Column(nullable = false)
-    private String externalId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column private String firstName;
+  @Column private String lastName;
+  @Column @Audited private Boolean proof;
+
+  @Column(insertable = false, updatable = false)
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date registered;
+
+  @Column
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date updated;
+
+  @Column(nullable = false)
+  private String externalId;
 }

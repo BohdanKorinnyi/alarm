@@ -3,13 +3,12 @@ package com.arloid.alarmcall.service;
 import com.arloid.alarmcall.dto.RegistrationPhoneDto;
 import com.arloid.alarmcall.entity.CallNumber;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CallNumberService {
-    CallNumber findById(long callNumberId);
+  Page<CallNumber> findAll(Pageable pageable);
 
-    Page<CallNumber> findAll(int page, int size);
+  void save(RegistrationPhoneDto phone, long clientId);
 
-    CallNumber save(RegistrationPhoneDto phone, long clientId);
-
-    CallNumber findByClientId(long id);
+  CallNumber findByClientId(long id);
 }

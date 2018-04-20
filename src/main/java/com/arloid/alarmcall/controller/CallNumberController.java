@@ -1,30 +1,34 @@
 package com.arloid.alarmcall.controller;
 
-import com.arloid.alarmcall.entity.CallNumber;
 import com.arloid.alarmcall.service.CallNumberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("numbers")
-@Api(tags = "Actions with call numbers")
+@Api(tags = "Numbers")
 public class CallNumberController {
-    private final CallNumberService callNumberService;
+  private final CallNumberService callNumberService;
 
-    @GetMapping
-    @ApiOperation(value = "Get all phone numbers")
-    public ResponseEntity<Page<CallNumber>> findAll(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(callNumberService.findAll(page, size));
-    }
+  @GetMapping
+  @ApiOperation(value = "Returns all numbers")
+  public ResponseEntity findAll(Pageable pageable) {
+    return ok(callNumberService.findAll(pageable));
+  }
 
-    @GetMapping("client/{clientId}")
-    @ApiOperation(value = "Get all client's phone numbers")
-    public ResponseEntity<?> findByClientId(@PathVariable long clientId) {
-        return ResponseEntity.ok(callNumberService.findByClientId(clientId));
-    }
+  @GetMapping("clients/{clientId}")
+  @ApiOperation(value = "Returns all numbers by client id")
+  public ResponseEntity findByClientId(@PathVariable long clientId) {
+    return ok(callNumberService.findByClientId(clientId));
+  }
 }

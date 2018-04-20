@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegistrationVoiceAlarmDto {
-    private String url;
-    private String languageCode;
+  private String url;
+  private String languageCode;
 }

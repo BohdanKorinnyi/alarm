@@ -8,11 +8,11 @@ import org.springframework.data.repository.Repository;
 import java.util.Optional;
 
 public interface ClientRepository extends Repository<Client, Long> {
-    Client findById(Long id);
+  Optional<Client> findById(Long id);
 
-    Page<Client> findAll(Pageable pageable);
+  Page<Client> findAll(Pageable pageable);
 
-    Client save(Client client);
+  Client save(Client client);
 
-    Client findByExternalId(String externalId);
+  Client findByExternalId(String externalId);
 }

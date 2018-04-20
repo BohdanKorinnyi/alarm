@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegistrationPhoneDto {
-    private String number;
+  private String number;
 }

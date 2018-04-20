@@ -29,46 +29,47 @@ import javax.annotation.PostConstruct;
 @AllArgsConstructor
 @SpringBootApplication
 public class AlarmCallApplication {
-    private final TwilioProperties twilioProperties;
+  private final TwilioProperties twilioProperties;
 
-    public static void main(String[] args) {
-        SpringApplication.run(AlarmCallApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(AlarmCallApplication.class, args);
+  }
 
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(new ApiInfoBuilder()
-                        .title("Alarm Call")
-                        .description("Microservice's endpoints")
-                        .contact(new Contact("Bohdan Korinnyi", null, "bohdan.korinnyi@gmail.com"))
-                        .build())
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(Predicates.not(PathSelectors.regex("/error.*")))
-                .build();
-    }
+  @Bean
+  public Docket api() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .apiInfo(
+            new ApiInfoBuilder()
+                .title("Alarm Call")
+                .description("Microservice's endpoints")
+                .contact(new Contact("Bohdan Korinnyi", null, "bohdan.korinnyi@gmail.com"))
+                .build())
+        .select()
+        .apis(RequestHandlerSelectors.any())
+        .paths(Predicates.not(PathSelectors.regex("/error.*")))
+        .build();
+  }
 
-    @PostConstruct
-    public void initTwilio() {
-        Twilio.init(twilioProperties.getSid(), twilioProperties.getToken());
-    }
+  @PostConstruct
+  public void initTwilio() {
+    Twilio.init(twilioProperties.getSid(), twilioProperties.getToken());
+  }
 
-    @Bean
-    public PhoneNumber fromPhoneNumber() {
-        return new PhoneNumber(twilioProperties.getNumber());
-    }
+  @Bean
+  public PhoneNumber fromPhoneNumber() {
+    return new PhoneNumber(twilioProperties.getNumber());
+  }
 
-    @Bean
-    public AWSCredentialsProvider credentialsProvider() {
-        return new EnvironmentVariableCredentialsProvider();
-    }
+  @Bean
+  public AWSCredentialsProvider credentialsProvider() {
+    return new EnvironmentVariableCredentialsProvider();
+  }
 
-    @Bean
-    public AmazonS3 amazonS3() {
-        return AmazonS3ClientBuilder.standard()
-                .withCredentials(credentialsProvider())
-                .withRegion(Regions.DEFAULT_REGION)
-                .build();
-    }
+  @Bean
+  public AmazonS3 amazonS3() {
+    return AmazonS3ClientBuilder.standard()
+        .withCredentials(credentialsProvider())
+        .withRegion(Regions.DEFAULT_REGION)
+        .build();
+  }
 }

@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "twilio", ignoreUnknownFields = false)
 public class TwilioProperties {
-    private String sid;
-    private String token;
-    private String number;
-    private String alarmEndpoint;
+  private String sid;
+  private String token;
+  private String number;
+  private String alarmEndpoint;
 }
