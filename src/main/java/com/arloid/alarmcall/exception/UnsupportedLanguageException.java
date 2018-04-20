@@ -10,11 +10,11 @@ import static java.util.stream.Collectors.toList;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class UnsupportedLanguageException extends RuntimeException {
-    public UnsupportedLanguageException(String message) {
-        super(message);
-    }
+  public UnsupportedLanguageException(String message) {
+    super(message);
+  }
 
-    public UnsupportedLanguageException(List<Language> supported) {
-        super("Supported languages: " + supported.stream().map(Language::getCode).collect(toList()));
-    }
+  public UnsupportedLanguageException(List<Language> supported) {
+    super("Supported languages: " + supported.stream().map(Language::getCode).collect(toList()));
+  }
 }

@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CallNumberDto {
-    private long clientId;
-    private String number;
+  private long clientId;
+  private String number;
 }

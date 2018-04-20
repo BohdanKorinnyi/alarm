@@ -1,38 +1,34 @@
 package com.arloid.alarmcall.controller;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.arloid.alarmcall.dto.ClientDto;
 import com.arloid.alarmcall.entity.Client;
 import com.arloid.alarmcall.service.ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("clients")
-@Api(tags = "Actions with clients")
+@Api(tags = "Clients")
 public class ClientController {
+  private final ClientService clientService;
 
-    private final ClientService clientService;
+  @GetMapping
+  @ApiOperation(value = "Returns all clients")
+  public ResponseEntity findAll(Pageable pageable) {
+    return ok(clientService.findAll(pageable));
+  }
 
-    @GetMapping
-    @ApiOperation(value = "Get all clients")
-    public ResponseEntity<?> findAll(@RequestParam @ApiParam(defaultValue = "1") int page,
-                                     @RequestParam @ApiParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(clientService.findAll(page, size));
-    }
-
-    @PutMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Update the existing client")
-    public void update(@RequestBody Client client) {
-        clientService.update(client);
-    }
+  @PutMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ApiOperation(value = "Updates the existing client")
+  public void update(@RequestBody Client client) {
+    clientService.update(client);
+  }
 }

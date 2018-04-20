@@ -1,38 +1,41 @@
 package com.arloid.alarmcall.controller;
 
-import com.arloid.alarmcall.entity.Call;
+import com.arloid.alarmcall.entity.AlarmCall;
 import com.arloid.alarmcall.service.CallService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @AllArgsConstructor
+@Api(tags = "Calls")
 @RequestMapping("calls")
-@Api(tags = "Actions with calls")
 public class CallController {
+  private final CallService callService;
 
-    private final CallService callService;
+  @GetMapping
+  @ApiOperation(value = "Returns all calls")
+  public ResponseEntity<Page<AlarmCall>> findAll(Pageable pageable) {
+    return ok(callService.findAll(pageable));
+  }
 
-    @GetMapping
-    @ApiOperation(value = "Get all calls")
-    public ResponseEntity<Page<Call>> findAll(@RequestParam int size, @RequestParam int page) {
-        return ResponseEntity.ok(callService.findAll(size, page));
-    }
+  @GetMapping("numbers/{numberId}")
+  @ApiOperation(value = "Returns all calls by the number id")
+  public ResponseEntity<Page<AlarmCall>> findByCallNumberId(
+      @PathVariable long numberId, Pageable pageable) {
+    return ok(callService.findByCallNumberId(pageable, numberId));
+  }
 
-    @GetMapping("number/{numberId}")
-    @ApiOperation(value = "Get all calls by number id")
-    public ResponseEntity<Page<Call>> findByCallNumberId(@PathVariable long numberId, @RequestParam int size, @RequestParam int page) {
-        return ResponseEntity.ok(callService.findByCallNumberId(numberId, size, page));
-    }
-
-    @PostMapping("client/{clientId}")
-    @ApiOperation(value = "Make a call by client id")
-    public ResponseEntity<?> makeToClient(@PathVariable long clientId) {
-        callService.makeByClientId(clientId);
-        return ResponseEntity.ok().build();
-    }
+  @PostMapping("clients/{clientId}")
+  @ApiOperation(value = "Makes a call by the client id")
+  public ResponseEntity makeToClient(@PathVariable long clientId) {
+    callService.makeByClientId(clientId);
+    return ok().build();
+  }
 }

@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegistrationSpeechAlarmDto {
-    private String message;
-    private String languageCode;
+  private String message;
+  private String languageCode;
 }
