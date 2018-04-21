@@ -1,8 +1,7 @@
 package com.arloid.alarmcall.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +10,9 @@ import java.util.Date;
 @Entity
 @Setter
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Alarm implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

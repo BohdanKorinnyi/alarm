@@ -30,13 +30,14 @@ public class AlarmServiceImpl implements AlarmService {
               + client.getId()
               + ". Please, update existing alarm if you need.");
     }
-    alarm = new Alarm();
-    alarm.setType(type);
-    alarm.setClient(client);
-    alarm.setAddressRecord(data);
-    alarm.setActive(true);
-    alarm.setLanguage(language);
-    return alarmRepository.save(alarm);
+    return alarmRepository.save(
+        Alarm.builder()
+            .type(type)
+            .client(client)
+            .addressRecord(data)
+            .active(true)
+            .language(language)
+            .build());
   }
 
   @Override

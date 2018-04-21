@@ -1,0 +1,14 @@
+server:
+  servlet:
+    path: /dev
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/alarm_call
+    username: postgres
+    password: root
+    hikari:
+      maximum-pool-size: 21
+      minimum-idle: 11
+  jpa:
+    show-sql: true
+    hibernate.ddl-auto: update
