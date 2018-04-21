@@ -310,7 +310,7 @@
         </addColumn>
     </changeSet>
     <changeSet id="1523918256318" author="bkorinnyi">
-        <addColumn tableName="alarmCall">
+        <addColumn tableName="call">
             <column name="parent_id" type="bigint"/>
         </addColumn>
     </changeSet>
