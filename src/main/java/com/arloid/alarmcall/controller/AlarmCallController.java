@@ -1,7 +1,8 @@
 package com.arloid.alarmcall.controller;
 
+import com.arloid.alarmcall.dto.CallStatusDto;
 import com.arloid.alarmcall.entity.AlarmCall;
-import com.arloid.alarmcall.service.CallService;
+import com.arloid.alarmcall.service.AlarmCallService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,6 @@ import static org.springframework.http.ResponseEntity.ok;
 @AllArgsConstructor
 @Api(tags = "Calls")
 @RequestMapping("calls")
-<<<<<<< Updated upstream:src/main/java/com/arloid/alarmcall/controller/CallController.java
-public class CallController {
-  private final CallService callService;
-=======
 public class AlarmCallController {
   private static final File FILE = new File("pixel.mp3");
   private final AlarmCallService alarmCallService;
@@ -35,25 +32,24 @@ public class AlarmCallController {
   public ResponseEntity getCallStatisticByStatus(CallStatusDto statusDto) {
     return ok(alarmCallService.getStatisticByStatus(statusDto.convert()));
   }
->>>>>>> Stashed changes:src/main/java/com/arloid/alarmcall/controller/AlarmCallController.java
 
   @GetMapping
   @ApiOperation(value = "Returns all calls")
   public ResponseEntity<Page<AlarmCall>> findAll(Pageable pageable) {
-    return ok(callService.findAll(pageable));
+    return ok(alarmCallService.findAll(pageable));
   }
 
   @GetMapping("numbers/{numberId}")
   @ApiOperation(value = "Returns all calls by the number id")
   public ResponseEntity<Page<AlarmCall>> findByCallNumberId(
       @PathVariable long numberId, Pageable pageable) {
-    return ok(callService.findByCallNumberId(pageable, numberId));
+    return ok(alarmCallService.findByCallNumberId(pageable, numberId));
   }
 
   @PostMapping("clients/{clientId}")
   @ApiOperation(value = "Makes a call by the client id")
   public ResponseEntity makeToClient(@PathVariable long clientId) {
-    callService.makeByClientId(clientId);
+    alarmCallService.makeByClientId(clientId);
     return ok().build();
   }
 

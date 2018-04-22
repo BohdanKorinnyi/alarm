@@ -9,6 +9,8 @@ import com.arloid.alarmcall.service.AlarmService;
 import com.arloid.alarmcall.service.S3Service;
 import com.arloid.alarmcall.service.TwilioService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,11 @@ public class AlarmServiceImpl implements AlarmService {
   private final TwilioService twilioService;
   private final S3Service s3Service;
   private final AlarmRepository alarmRepository;
+
+  @Override
+  public Page<Alarm> find(Pageable pageable) {
+    return alarmRepository.findAll(pageable);
+  }
 
   @Override
   public Alarm save(Client client, Alarm.AlarmRecordType type, String data, Language language) {

@@ -4,6 +4,7 @@ import com.arloid.alarmcall.service.AlarmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,12 @@ import static org.springframework.http.ResponseEntity.status;
 @Api(tags = "Alarms")
 public class AlarmController {
   private final AlarmService alarmService;
+
+  @GetMapping
+  @ApiOperation(value = "Returns all alarms")
+  public ResponseEntity findAll(Pageable pageable) {
+    return ok(alarmService.find(pageable));
+  }
 
   @GetMapping("clients/{clientId}")
   @ApiOperation(value = "Returns alarms by the client id")

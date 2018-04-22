@@ -1,9 +1,11 @@
 package com.arloid.alarmcall.service.impl;
 
+import com.arloid.alarmcall.dto.CallStatisticDto;
 import com.arloid.alarmcall.entity.Alarm;
 import com.arloid.alarmcall.entity.AlarmCall;
 import com.arloid.alarmcall.entity.CallNumber;
-import com.arloid.alarmcall.repository.CallRepository;
+import com.arloid.alarmcall.entity.CallStatus;
+import com.arloid.alarmcall.repository.AlarmCallRepository;
 import com.arloid.alarmcall.service.*;
 import com.twilio.rest.api.v2010.account.Call;
 import lombok.AllArgsConstructor;
@@ -11,7 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static java.lang.Integer.parseInt;
@@ -20,23 +25,36 @@ import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 @AllArgsConstructor
-public class CallServiceImpl implements CallService {
+public class AlarmCallServiceImpl implements AlarmCallService {
   private static final int MAX_ATTEMPTS = 4;
 
-  private final CallRepository callRepository;
+  private final AlarmCallRepository alarmCallRepository;
   private final TwilioService twilioService;
   private final AlarmService alarmService;
   private final CallNumberService callNumberService;
   private final CallStatusService callStatusService;
 
   @Override
+  public CallStatisticDto getStatisticByStatus(CallStatus status) {
+    List<AlarmCall> calls = alarmCallRepository.findByCallStatus(status);
+    return new CallStatisticDto(
+        calls.size(),
+        calls
+            .stream()
+            .map(AlarmCall::getCost)
+            .filter(Objects::nonNull)
+            .mapToDouble(BigDecimal::doubleValue)
+            .sum());
+  }
+
+  @Override
   public Page<AlarmCall> findAll(Pageable pageable) {
-    return callRepository.findAll(pageable);
+    return alarmCallRepository.findAll(pageable);
   }
 
   @Override
   public Page<AlarmCall> findByCallNumberId(Pageable pageable, long callNumberId) {
-    return callRepository.findByCallNumberId(callNumberId, pageable);
+    return alarmCallRepository.findByCallNumberId(callNumberId, pageable);
   }
 
   @Override
@@ -47,10 +65,10 @@ public class CallServiceImpl implements CallService {
     alarmCall.setAlarm(alarm);
     alarmCall.setCallNumber(number);
     alarmCall.setCallStatus(callStatusService.findByName("created"));
-    callRepository.save(alarmCall);
+    alarmCallRepository.save(alarmCall);
     Call twilioCall = twilioService.makeCall(number.getNumber(), clientId);
     alarmCall.setProviderId(twilioCall.getSid());
-    callRepository.save(alarmCall);
+    alarmCallRepository.save(alarmCall);
     CallStatusFetcher.add(twilioCall.getSid());
   }
 
@@ -58,12 +76,12 @@ public class CallServiceImpl implements CallService {
   public void makeByProviderId(String providerId) {
     Function<AlarmCall, Long> parentIdFunction =
         alarmCall -> isNull(alarmCall.getParentId()) ? alarmCall.getId() : alarmCall.getParentId();
-    AlarmCall alarmCall = callRepository.findByProviderId(providerId);
+    AlarmCall alarmCall = alarmCallRepository.findByProviderId(providerId);
     if (alarmCall.getCallStatus().equals(callStatusService.findByName("completed"))) {
       Call call = Call.fetcher(providerId).fetch();
-      callRepository.save(updateCall(call, alarmCall));
+      alarmCallRepository.save(updateCall(call, alarmCall));
     }
-    Integer attempt = callRepository.countByParentId(parentIdFunction.apply(alarmCall));
+    Integer attempt = alarmCallRepository.countByParentId(parentIdFunction.apply(alarmCall));
     if (MAX_ATTEMPTS > attempt) {
       CallNumber callNumber = alarmCall.getCallNumber();
       AlarmCall newAlarmCall = new AlarmCall();
@@ -71,19 +89,19 @@ public class CallServiceImpl implements CallService {
       newAlarmCall.setCallNumber(callNumber);
       newAlarmCall.setCallStatus(callStatusService.findByName("created"));
       newAlarmCall.setParentId(parentIdFunction.apply(alarmCall));
-      callRepository.save(newAlarmCall);
+      alarmCallRepository.save(newAlarmCall);
       Call twilioCall =
           twilioService.makeCall(callNumber.getNumber(), callNumber.getClient().getId());
       newAlarmCall.setProviderId(twilioCall.getSid());
-      callRepository.save(newAlarmCall);
+      alarmCallRepository.save(newAlarmCall);
       CallStatusFetcher.add(twilioCall.getSid());
     }
   }
 
   @Override
   public void update(Call call) {
-    AlarmCall alarmAlarmCall = callRepository.findByProviderId(call.getSid());
-    callRepository.save(updateCall(call, alarmAlarmCall));
+    AlarmCall alarmAlarmCall = alarmCallRepository.findByProviderId(call.getSid());
+    alarmCallRepository.save(updateCall(call, alarmAlarmCall));
   }
 
   private AlarmCall updateCall(Call call, AlarmCall alarmAlarmCall) {

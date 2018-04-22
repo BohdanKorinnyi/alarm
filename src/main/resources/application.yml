@@ -6,14 +6,20 @@ spring:
     url: jdbc:postgresql://arloid.c8mjmsowzws0.us-west-2.rds.amazonaws.com:5432/alarm_call
     username: arloid
     password: arloidpass
+    driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:db.change-set/liquibase.xml
   servlet:
     multipart:
       max-file-size: 10MB
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     show-sql: true
     hibernate.ddl-auto: update
+    properties:
+      hibername:
+        temp:
+          use_jdbc_metadata_defaults: false
 
 twilio:
   sid: ACfb28f9c33fc8c2d2379ec331ad282998

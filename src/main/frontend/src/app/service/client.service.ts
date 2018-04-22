@@ -7,6 +7,6 @@ export class ClientService {
   }
 
   getClients() {
-    return this.http.get('/dev/clients');
+    return this.http.get('/api/clients');
   }
 }

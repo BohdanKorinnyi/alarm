@@ -9,7 +9,7 @@
                 <div class="icon icon-info">
                   <i class="now-ui-icons users_single-02"></i>
                 </div>
-                <h3 class="info-title">{{clientTotal}}</h3>
+                <h3 class="info-title">{{clients}}</h3>
                 <h6 class="stats-title">Active Clients</h6>
               </div>
             </div>
@@ -20,8 +20,8 @@
                 <div class="icon icon-primary">
                   <i class="now-ui-icons ui-2_chat-round"></i>
                 </div>
-                <h3 class="info-title">859</h3>
-                <h6 class="stats-title">Alarms</h6>
+                <h3 class="info-title">{{completedCalls}}</h3>
+                <h6 class="stats-title">Alarm Calls</h6>
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
                 </div>
                 <h3 class="info-title">
                   <small>$</small>
-                  3,521
+                  {{((cost * (-1))+'').replace('.',',')}}
                 </h3>
                 <h6 class="stats-title">Spent</h6>
               </div>
