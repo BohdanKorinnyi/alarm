@@ -4,6 +4,7 @@ import com.arloid.alarmcall.service.AlarmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.ResponseEntity.*;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("alarms")
@@ -25,6 +26,13 @@ public class AlarmController {
   @ApiOperation(value = "Returns all alarms")
   public ResponseEntity findAll(Pageable pageable) {
     return ok(alarmService.find(pageable));
+  }
+
+  @GetMapping(value = "test", produces = "audio/x-wav")
+  @ApiOperation(value = "Returns all alarms")
+  public ResponseEntity findAlls(Pageable pageable) {
+    log.info("getting test");
+    return noContent().build();
   }
 
   @GetMapping("clients/{clientId}")
@@ -46,6 +54,7 @@ public class AlarmController {
   @PostMapping(value = "{clientId}", produces = MediaType.TEXT_XML_VALUE)
   @ApiOperation(value = "Returns TwiMl by the client id")
   public ResponseEntity getTwiMlAlarm(@PathVariable long clientId) {
+    log.info("return twiml");
     return ok(alarmService.findTwiMlByClient(clientId));
   }
 }

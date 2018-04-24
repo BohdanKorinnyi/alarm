@@ -12,6 +12,7 @@ import com.twilio.twiml.voice.Say;
 import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TwilioServiceImpl implements TwilioService {
@@ -47,12 +49,17 @@ public class TwilioServiceImpl implements TwilioService {
   @Override
   public String buildSayResponse(String message, Language language) {
     Say intro = intro().apply(language);
+    log.info("build");
     return new VoiceResponse.Builder()
         .say(intro)
         .pause(PAUSE)
         .say(intro)
         .pause(PAUSE)
         .say(alarmMessage.apply(message, language.getCode()))
+        .play(
+            new Play.Builder(
+                    "http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/alarms/test")
+                .build())
         .build()
         .toXml();
   }
@@ -66,6 +73,10 @@ public class TwilioServiceImpl implements TwilioService {
         .say(intro)
         .pause(PAUSE)
         .play(new Play.Builder(url).build())
+        .play(
+            new Play.Builder(
+                    "http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/alarms/test")
+                .build())
         .build()
         .toXml();
   }

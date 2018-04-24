@@ -1,6 +1,3 @@
-server:
-  servlet:
-    path: /api
 spring:
   datasource:
     url: jdbc:postgresql://arloid.c8mjmsowzws0.us-west-2.rds.amazonaws.com:5432/alarm_call
@@ -14,7 +11,7 @@ spring:
       max-file-size: 10MB
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    show-sql: true
+    show-sql: false
     hibernate.ddl-auto: update
     properties:
       hibername:
@@ -25,7 +22,7 @@ twilio:
   sid: ACfb28f9c33fc8c2d2379ec331ad282998
   token: 151f008b881a76f59c761adde15e95fe
   number: 2513334379
-  alarm-endpoint: http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/api/alarms/
+  alarm-endpoint: http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/alarms/
 
 amazon:
   s3:
