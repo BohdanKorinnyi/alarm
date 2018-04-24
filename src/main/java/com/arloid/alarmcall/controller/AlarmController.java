@@ -20,15 +20,6 @@ import static org.springframework.http.ResponseEntity.status;
 public class AlarmController {
   private final AlarmService alarmService;
 
-<<<<<<< Updated upstream
-=======
-  @GetMapping
-  @ApiOperation(value = "Returns all alarms")
-  public ResponseEntity findAll(Pageable pageable) {
-    return ok(alarmService.find(pageable));
-  }
-
->>>>>>> Stashed changes
   @GetMapping("clients/{clientId}")
   @ApiOperation(value = "Returns alarms by the client id")
   public ResponseEntity findByClientId(@PathVariable long clientId) {
