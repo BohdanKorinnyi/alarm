@@ -1,6 +1,6 @@
 package com.arloid.alarmcall.service.impl;
 
-import com.arloid.alarmcall.service.CallService;
+import com.arloid.alarmcall.service.AlarmCallService;
 import com.google.common.collect.ImmutableSet;
 import com.twilio.rest.api.v2010.account.Call;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class CallStatusFetcher {
           com.twilio.rest.api.v2010.account.Call.Status.CANCELED,
           com.twilio.rest.api.v2010.account.Call.Status.FAILED);
   private static ConcurrentLinkedQueue<String> callSids = new ConcurrentLinkedQueue<>();
-  private final CallService callService;
+  private final AlarmCallService alarmCallService;
 
   public static void add(String callId) {
     callSids.add(callId);
@@ -39,12 +39,12 @@ public class CallStatusFetcher {
     callSids.forEach(
         id -> {
           Call call = Call.fetcher(id).fetch();
-          callService.update(call);
+          alarmCallService.update(call);
           if (com.twilio.rest.api.v2010.account.Call.Status.COMPLETED.equals(call.getStatus())) {
             callSids.remove(call.getSid());
           } else if (UNSUCCESSFUL_CALL_STATUSES.contains(call.getStatus())) {
             callSids.remove(call.getSid());
-            callService.makeByProviderId(call.getSid());
+            alarmCallService.makeByProviderId(call.getSid());
           }
         });
   }

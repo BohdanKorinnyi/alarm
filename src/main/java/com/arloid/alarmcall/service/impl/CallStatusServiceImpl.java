@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,11 @@ public class CallStatusServiceImpl implements CallStatusService {
                     return callStatusRepository.findByName(key);
                   }
                 });
+  }
+
+  @Override
+  public List<CallStatus> findAll() {
+    return callStatusRepository.findAll();
   }
 
   @Override

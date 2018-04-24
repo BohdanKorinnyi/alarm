@@ -1,11 +1,16 @@
 package com.arloid.alarmcall.repository;
 
 import com.arloid.alarmcall.entity.AlarmCall;
+import com.arloid.alarmcall.entity.CallStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 
-public interface CallRepository extends Repository<AlarmCall, Long> {
+import java.util.List;
+
+public interface AlarmCallRepository extends Repository<AlarmCall, Long> {
+  List<AlarmCall> findByCallStatus(CallStatus callStatus);
+
   AlarmCall save(AlarmCall alarmCall);
 
   Page<AlarmCall> findAll(Pageable pageable);
