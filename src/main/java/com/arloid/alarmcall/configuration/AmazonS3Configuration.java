@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "amazon.s3", ignoreUnknownFields = false)
 public class AmazonS3Configuration {
-    private String accessKey;
-    private String secretKey;
-    private String bucket;
+  private String accessKey;
+  private String secretKey;
+  private String bucket;
 }

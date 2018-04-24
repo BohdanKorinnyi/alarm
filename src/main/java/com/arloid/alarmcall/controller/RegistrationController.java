@@ -14,22 +14,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("registrations")
-@Api(tags = "New client registration")
+@Api(tags = "Registrations")
 public class RegistrationController {
-    private final RegistrationService registrationService;
+  private final RegistrationService registrationService;
 
-    @PostMapping("speech")
-    @ApiOperation("Register a new client with text alarm")
-    public ResponseEntity registerSpeech(@RequestBody @ApiParam("Message is required for speech alarm") RegistrationDto<RegistrationSpeechAlarmDto> registration) {
-        return ResponseEntity.ok(registrationService.register(registration));
-    }
+  @PostMapping("speech")
+  @ApiOperation("Registers a new client with text alarm")
+  public ResponseEntity registerSpeech(
+      @RequestBody @ApiParam("Message is required for speech alarm")
+          RegistrationDto<RegistrationSpeechAlarmDto> registration) {
+    return ok(registrationService.register(registration));
+  }
 
-    @PostMapping("voice")
-    @ApiOperation("Register a new client with audio alarm")
-    public ResponseEntity registerVoice(@RequestBody @ApiParam("Record URL is required for voice alarm") RegistrationDto<RegistrationVoiceAlarmDto> registration) {
-        return ResponseEntity.ok(registrationService.register(registration));
-    }
+  @PostMapping("voice")
+  @ApiOperation("Register a new client with link to the audio alarm")
+  public ResponseEntity registerVoice(
+      @RequestBody @ApiParam("The record's URL is required for voice alarm")
+          RegistrationDto<RegistrationVoiceAlarmDto> registration) {
+    return ok(registrationService.register(registration));
+  }
 }

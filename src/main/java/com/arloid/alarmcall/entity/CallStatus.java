@@ -8,9 +8,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "call_status")
 public class CallStatus {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "value")
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(name = "value")
+  private String name;
 }

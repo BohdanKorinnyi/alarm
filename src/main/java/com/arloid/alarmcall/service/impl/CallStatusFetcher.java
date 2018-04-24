@@ -1,6 +1,7 @@
 package com.arloid.alarmcall.service.impl;
 
 import com.arloid.alarmcall.service.CallService;
+import com.google.common.collect.ImmutableSet;
 import com.twilio.rest.api.v2010.account.Call;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -9,32 +10,42 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
 @Component
 @AllArgsConstructor
 public class CallStatusFetcher {
-    private static ConcurrentLinkedQueue<String> callSids = new ConcurrentLinkedQueue<>();
-    private final CallService callService;
+  public static final Set<Call.Status> UNSUCCESSFUL_CALL_STATUSES =
+      ImmutableSet.of(
+          com.twilio.rest.api.v2010.account.Call.Status.BUSY,
+          com.twilio.rest.api.v2010.account.Call.Status.NO_ANSWER,
+          com.twilio.rest.api.v2010.account.Call.Status.CANCELED,
+          com.twilio.rest.api.v2010.account.Call.Status.FAILED);
+  private static ConcurrentLinkedQueue<String> callSids = new ConcurrentLinkedQueue<>();
+  private final CallService callService;
 
-    @SneakyThrows
-    @Scheduled(fixedRate = 2000L)
-    public void fetchStatus() {
-        if (CollectionUtils.isEmpty(callSids)) {
-            return;
-        }
-        callSids.forEach(id -> {
-            Call call = Call.fetcher(id).fetch();
-            callService.update(call);
+  public static void add(String callId) {
+    callSids.add(callId);
+  }
+
+  @SneakyThrows
+  @Scheduled(fixedRate = 4000L)
+  public void fetchStatus() {
+    if (CollectionUtils.isEmpty(callSids)) {
+      return;
+    }
+    callSids.forEach(
+        id -> {
+          Call call = Call.fetcher(id).fetch();
+          callService.update(call);
+          if (com.twilio.rest.api.v2010.account.Call.Status.COMPLETED.equals(call.getStatus())) {
+            callSids.remove(call.getSid());
+          } else if (UNSUCCESSFUL_CALL_STATUSES.contains(call.getStatus())) {
+            callSids.remove(call.getSid());
+            callService.makeByProviderId(call.getSid());
+          }
         });
-    }
-
-    public static void add(String callId) {
-        callSids.add(callId);
-    }
-
-    public static void remove(String callId) {
-        callSids.remove(callId);
-    }
+  }
 }

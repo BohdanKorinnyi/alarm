@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card ">
+      <div class="card-header ">
+        <h4 class="card-title"></h4>
+      </div>
+      <div class="card-body ">
+        <table class="table">
+          <thead>
+          <tr>
+            <td>ID</td>
+            <td>Name</td>
+            <td>Proof</td>
+            <td>Registered</td>
+            <td>Updated</td>
+            <td>External ID</td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let client of clients">
+            <td>{{client.id}}</td>
+            <td>{{client.firstName}} {{client.lastName}}</td>
+            <td>{{client.proof}}</td>
+            <td>{{client.registered}}</td>
+            <td>{{client.updated}}</td>
+            <td>{{client.externalId}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

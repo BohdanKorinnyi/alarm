@@ -9,23 +9,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("languages")
 @AllArgsConstructor
-@Api(tags = "Operations with alarm languages")
+@RequestMapping("languages")
+@Api(tags = "Languages")
 public class LanguageController {
-    private final LanguageService languageService;
+  private final LanguageService languageService;
 
-    @PostMapping
-    @ApiOperation(value = "Add new language to alarm")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody LanguageDto languageDto) {
-        languageService.save(languageDto);
-    }
+  @PostMapping
+  @ApiOperation(value = "Creates a new language for alarms")
+  @ResponseStatus(HttpStatus.CREATED)
+  public void save(@RequestBody LanguageDto languageDto) {
+    languageService.save(languageDto);
+  }
 
-    @PatchMapping
-    @ApiOperation(value = "Update the message of introducing by language")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody LanguageDto languageDto) {
-        languageService.update(languageDto);
-    }
+  @PatchMapping
+  @ApiOperation(value = "Updates the introducing message for language")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void update(@RequestBody LanguageDto languageDto) {
+    languageService.update(languageDto);
+  }
 }

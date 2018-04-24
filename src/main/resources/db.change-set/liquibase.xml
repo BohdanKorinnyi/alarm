@@ -309,4 +309,9 @@
             <column name="intro" type="varchar(256)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="1523918256318" author="bkorinnyi">
+        <addColumn tableName="call">
+            <column name="parent_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

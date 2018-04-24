@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class RegistrationClientDto {
-    @JsonProperty("smartHouseClientId")
-    private String id;
-    private String firstName;
-    private String lastName;
+  @JsonProperty("smartHouseClientId")
+  private String id;
+
+  private String firstName;
+  private String lastName;
 }
