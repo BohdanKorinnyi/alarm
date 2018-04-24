@@ -28,13 +28,6 @@ public class AlarmController {
     return ok(alarmService.find(pageable));
   }
 
-  @GetMapping(value = "test", produces = "audio/x-wav")
-  @ApiOperation(value = "Returns all alarms")
-  public ResponseEntity findAlls(Pageable pageable) {
-    log.info("getting test");
-    return noContent().build();
-  }
-
   @GetMapping("clients/{clientId}")
   @ApiOperation(value = "Returns alarms by the client id")
   public ResponseEntity findByClientId(@PathVariable long clientId) {
@@ -54,7 +47,6 @@ public class AlarmController {
   @PostMapping(value = "{clientId}", produces = MediaType.TEXT_XML_VALUE)
   @ApiOperation(value = "Returns TwiMl by the client id")
   public ResponseEntity getTwiMlAlarm(@PathVariable long clientId) {
-    log.info("return twiml");
     return ok(alarmService.findTwiMlByClient(clientId));
   }
 }
