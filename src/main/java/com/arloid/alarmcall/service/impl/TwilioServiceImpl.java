@@ -47,25 +47,21 @@ public class TwilioServiceImpl implements TwilioService {
   }
 
   @Override
-  public String buildSayResponse(String message, Language language) {
+  public String generateSayTwiMl(String message, Language language, long clientId) {
     Say intro = intro().apply(language);
-    log.info("build");
     return new VoiceResponse.Builder()
         .say(intro)
         .pause(PAUSE)
         .say(intro)
         .pause(PAUSE)
         .say(alarmMessage.apply(message, language.getCode()))
-        .play(
-            new Play.Builder(
-                    "http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/alarms/test")
-                .build())
+        .play(new Play.Builder(twilioProperties.getTrackerEndpoint() + clientId).build())
         .build()
         .toXml();
   }
 
   @Override
-  public String buildPlayResponse(String url, Language language) {
+  public String generatePlayTwiMl(String url, Language language, long clientId) {
     Say intro = intro().apply(language);
     return new VoiceResponse.Builder()
         .say(intro)
@@ -73,10 +69,7 @@ public class TwilioServiceImpl implements TwilioService {
         .say(intro)
         .pause(PAUSE)
         .play(new Play.Builder(url).build())
-        .play(
-            new Play.Builder(
-                    "http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/alarms/test")
-                .build())
+        .play(new Play.Builder(twilioProperties.getTrackerEndpoint() + clientId).build())
         .build()
         .toXml();
   }

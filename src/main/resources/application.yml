@@ -23,6 +23,7 @@ twilio:
   token: 151f008b881a76f59c761adde15e95fe
   number: 2513334379
   alarm-endpoint: http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/alarms/
+  tracker-endpoint: http://ec2-54-244-191-28.us-west-2.compute.amazonaws.com:8080/calls/closes/
 
 amazon:
   s3:

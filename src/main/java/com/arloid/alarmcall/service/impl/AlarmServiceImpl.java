@@ -9,6 +9,7 @@ import com.arloid.alarmcall.service.AlarmService;
 import com.arloid.alarmcall.service.S3Service;
 import com.arloid.alarmcall.service.TwilioService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static java.util.Objects.nonNull;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class AlarmServiceImpl implements AlarmService {
@@ -58,11 +60,12 @@ public class AlarmServiceImpl implements AlarmService {
   }
 
   @Override
-  public String findTwiMlByClient(long clientId) {
+  public String getTwiMlByClient(long clientId) {
     Alarm alarm = alarmRepository.findByClientId(clientId);
     if (alarm.getType() == Alarm.AlarmRecordType.SPEECH) {
-      return twilioService.buildSayResponse(alarm.getAddressRecord(), alarm.getLanguage());
+      return twilioService.generateSayTwiMl(
+          alarm.getAddressRecord(), alarm.getLanguage(), clientId);
     }
-    return twilioService.buildPlayResponse(alarm.getAddressRecord(), alarm.getLanguage());
+    return twilioService.generatePlayTwiMl(alarm.getAddressRecord(), alarm.getLanguage(), clientId);
   }
 }
