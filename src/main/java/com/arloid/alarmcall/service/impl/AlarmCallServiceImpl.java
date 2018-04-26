@@ -113,7 +113,6 @@ public class AlarmCallServiceImpl implements AlarmCallService {
     } catch (Exception e) {
       log.error(
           "An error has occurred during updating call {} for client {}", callSid, clientId, e);
-      CallStatusFetcher.remove(clientId);
     }
   }
 
