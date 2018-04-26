@@ -7,14 +7,18 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CallStatusServiceImpl implements CallStatusService {
+  public static final String CREATED = "created";
+  public static final String COMPLETED = "completed";
   private final CallStatusRepository callStatusRepository;
 
   private LoadingCache<String, CallStatus> statusCache;

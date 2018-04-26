@@ -30,3 +30,8 @@ amazon:
     access_key: AKIAITCZH4U66KT7VPTQ
     secret_key: YCxPORIhVCpXojjoMeFJoMYgaTlZj9TwtOleYx
     bucket: alarm-twiml
+alarm:
+  internal:
+    max-call-attempts: 5
+logging:
+  file: alarm-call.log

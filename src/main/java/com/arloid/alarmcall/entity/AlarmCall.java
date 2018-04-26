@@ -1,15 +1,21 @@
 package com.arloid.alarmcall.entity;
 
+import com.twilio.rest.api.v2010.account.Call;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import static java.lang.Integer.parseInt;
+
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "call")
 public class AlarmCall {
   @Id
@@ -42,4 +48,24 @@ public class AlarmCall {
   @Column private BigDecimal cost;
   @Column private String providerId;
   @Column private Long parentId;
+
+  public AlarmCall(CallNumber callNumber, CallStatus callStatus, Alarm alarm, long parentId) {
+    this.callNumber = callNumber;
+    this.callStatus = callStatus;
+    this.parentId = parentId;
+    this.alarm = alarm;
+  }
+
+  public AlarmCall copy(Call call, CallStatus callStatus) {
+    copy(call);
+    setCallStatus(callStatus);
+    return this;
+  }
+
+  public AlarmCall copy(Call call) {
+    setDuration(StringUtils.isEmpty(call.getDuration()) ? null : parseInt(call.getDuration()));
+    setCost(call.getPrice());
+    setUpdated(new Date());
+    return this;
+  }
 }

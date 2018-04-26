@@ -1,53 +1,45 @@
 package com.arloid.alarmcall.service.impl;
 
+import com.arloid.alarmcall.configuration.AlarmCallProperties;
 import com.arloid.alarmcall.dto.CallStatisticDto;
-import com.arloid.alarmcall.entity.Alarm;
 import com.arloid.alarmcall.entity.AlarmCall;
-import com.arloid.alarmcall.entity.CallNumber;
 import com.arloid.alarmcall.entity.CallStatus;
 import com.arloid.alarmcall.repository.AlarmCallRepository;
 import com.arloid.alarmcall.service.*;
 import com.twilio.rest.api.v2010.account.Call;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
-import static com.arloid.alarmcall.service.impl.CallStatusFetcher.isClientCallAvailable;
-import static java.lang.Integer.parseInt;
+import static com.arloid.alarmcall.service.impl.CallStatusFetcher.getCallSid;
+import static com.arloid.alarmcall.service.impl.CallStatusServiceImpl.COMPLETED;
+import static com.arloid.alarmcall.service.impl.CallStatusServiceImpl.CREATED;
 import static java.util.Objects.isNull;
-import static org.springframework.util.StringUtils.isEmpty;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AlarmCallServiceImpl implements AlarmCallService {
-  private static final int MAX_ATTEMPTS = 4;
+  private Function<AlarmCall, Long> parentId =
+      call -> isNull(call.getParentId()) ? call.getId() : call.getParentId();
 
-  private final AlarmCallRepository alarmCallRepository;
-  private final TwilioService twilioService;
   private final AlarmService alarmService;
+  private final TwilioService twilioService;
   private final CallNumberService callNumberService;
   private final CallStatusService callStatusService;
+  private final AlarmCallRepository alarmCallRepository;
+  private final AlarmCallProperties alarmCallProperties;
 
   @Override
   public CallStatisticDto getStatisticByStatus(CallStatus status) {
     List<AlarmCall> calls = alarmCallRepository.findByCallStatus(status);
-    return new CallStatisticDto(
-        calls.size(),
-        calls
-            .stream()
-            .map(AlarmCall::getCost)
-            .filter(Objects::nonNull)
-            .mapToDouble(BigDecimal::doubleValue)
-            .sum());
+    return new CallStatisticDto(calls.size(), calculateCost(calls));
   }
 
   @Override
@@ -62,19 +54,18 @@ public class AlarmCallServiceImpl implements AlarmCallService {
 
   @Override
   public void makeByClientId(long clientId) {
-    log.info("Try to call client {}", clientId);
-    if (isClientCallAvailable(clientId)) {
-      log.info("System has been calling to the client {}", clientId);
-      throw new RuntimeException("System has been calling to the client");
-    }
-    CallNumber number = callNumberService.findByClientId(clientId);
-    Alarm alarm = alarmService.findByClientId(clientId);
     AlarmCall alarmCall = new AlarmCall();
-    alarmCall.setAlarm(alarm);
-    alarmCall.setCallNumber(number);
-    alarmCall.setCallStatus(callStatusService.findByName("created"));
+    alarmCall.setAlarm(alarmService.findByClientId(clientId));
+    alarmCall.setCallNumber(callNumberService.findByClientId(clientId));
+    alarmCall.setCallStatus(callStatusService.findByName(CREATED));
     alarmCallRepository.save(alarmCall);
-    Call twilioCall = twilioService.makeCall(number.getNumber(), clientId);
+    log.info("Call to client {} was created with id {}", clientId, alarmCall.getId());
+    Call twilioCall = twilioService.makeCall(alarmCall.getCallNumber().getNumber(), clientId);
+    log.info(
+        "Call {} to client {} was created on Twilio with sid {}",
+        alarmCall.getId(),
+        clientId,
+        twilioCall.getSid());
     alarmCall.setProviderId(twilioCall.getSid());
     alarmCallRepository.save(alarmCall);
     CallStatusFetcher.add(clientId, twilioCall.getSid());
@@ -82,52 +73,59 @@ public class AlarmCallServiceImpl implements AlarmCallService {
 
   @Override
   public void makeByProviderId(String providerId) {
-    Function<AlarmCall, Long> parentIdFunction =
-        alarmCall -> isNull(alarmCall.getParentId()) ? alarmCall.getId() : alarmCall.getParentId();
+    log.info("Call to client by twilio id {}", providerId);
     AlarmCall alarmCall = alarmCallRepository.findByProviderId(providerId);
-    if (alarmCall.getCallStatus().equals(callStatusService.findByName("completed"))) {
+    if (alarmCall.getCallStatus().equals(callStatusService.findByName(COMPLETED))) {
       Call call = Call.fetcher(providerId).fetch();
-      alarmCallRepository.save(updateCall(call, alarmCall));
+      alarmCallRepository.save(
+          alarmCall.copy(call, callStatusService.findByName(call.getStatus().toString())));
     }
-    Integer attempt = alarmCallRepository.countByParentId(parentIdFunction.apply(alarmCall));
-    if (MAX_ATTEMPTS > attempt) {
-      CallNumber callNumber = alarmCall.getCallNumber();
-      AlarmCall newAlarmCall = new AlarmCall();
-      newAlarmCall.setAlarm(alarmCall.getAlarm());
-      newAlarmCall.setCallNumber(callNumber);
-      newAlarmCall.setCallStatus(callStatusService.findByName("created"));
-      newAlarmCall.setParentId(parentIdFunction.apply(alarmCall));
-      alarmCallRepository.save(newAlarmCall);
-      Call twilioCall =
-          twilioService.makeCall(callNumber.getNumber(), callNumber.getClient().getId());
-      newAlarmCall.setProviderId(twilioCall.getSid());
-      alarmCallRepository.save(newAlarmCall);
-      CallStatusFetcher.add(alarmCall.getId(), twilioCall.getSid());
+    Integer attempt = alarmCallRepository.countByParentId(parentId.apply(alarmCall));
+    if (alarmCallProperties.getMaxCallAttempts() > attempt) {
+      log.info("Trying to call client by provider id {}, attempt {}", providerId, attempt);
+      retryCall(alarmCall);
+    } else {
+      log.info(
+          "Were done all available attempts calling client {}",
+          alarmCall.getCallNumber().getClient().getId());
+      CallStatusFetcher.remove(alarmCall.getCallNumber().getClient().getId());
     }
   }
 
   @Override
   public void update(Call call) {
-    AlarmCall alarmAlarmCall = alarmCallRepository.findByProviderId(call.getSid());
-    alarmCallRepository.save(updateCall(call, alarmAlarmCall));
+    AlarmCall alarmCall = alarmCallRepository.findByProviderId(call.getSid());
+    alarmCallRepository.save(
+        alarmCall.copy(call, callStatusService.findByName(call.getStatus().toString())));
   }
 
   @Override
-  public void update(long clientId) {
-    log.info("Update completed call by client id " + clientId);
-    String callSid = CallStatusFetcher.getCallSid(clientId);
-    AlarmCall alarmCall = alarmCallRepository.findByProviderId(callSid);
+  public void complete(long clientId) {
+    AlarmCall alarmCall = alarmCallRepository.findByProviderId(getCallSid(clientId));
     alarmCall.setFullyListened(true);
     alarmCall.setUpdated(new Date());
-    alarmCallRepository.save(alarmCall);
     CallStatusFetcher.remove(clientId);
+    alarmCallRepository.save(alarmCall);
   }
 
-  private AlarmCall updateCall(Call call, AlarmCall alarmAlarmCall) {
-    alarmAlarmCall.setCallStatus(callStatusService.findByName(call.getStatus().toString()));
-    alarmAlarmCall.setDuration(isEmpty(call.getDuration()) ? null : parseInt(call.getDuration()));
-    alarmAlarmCall.setCost(call.getPrice());
-    alarmAlarmCall.setUpdated(new Date());
-    return alarmAlarmCall;
+  @Override
+  public AlarmCall findByProviderId(String twilioId) {
+    return alarmCallRepository.findByProviderId(twilioId);
+  }
+
+  private void retryCall(AlarmCall alarmCall) {
+    AlarmCall newAlarmCall =
+        new AlarmCall(
+            alarmCall.getCallNumber(),
+            callStatusService.findByName(CREATED),
+            alarmCall.getAlarm(),
+            parentId.apply(alarmCall));
+    Long clientId = newAlarmCall.getCallNumber().getClient().getId();
+    log.info("Retry call to client {} parent {}", clientId, newAlarmCall.getParentId());
+    alarmCallRepository.save(newAlarmCall);
+    Call twilioCall = twilioService.makeCall(alarmCall.getCallNumber().getNumber(), clientId);
+    newAlarmCall.setProviderId(twilioCall.getSid());
+    alarmCallRepository.save(newAlarmCall);
+    CallStatusFetcher.add(alarmCall.getId(), twilioCall.getSid());
   }
 }

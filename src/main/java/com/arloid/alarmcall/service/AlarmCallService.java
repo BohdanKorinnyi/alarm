@@ -7,10 +7,16 @@ import com.twilio.rest.api.v2010.account.Call;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
+
 public interface AlarmCallService {
   void update(Call call);
 
-  void update(long clientId);
+  void complete(long clientId);
+
+  AlarmCall findByProviderId(String twilioId);
 
   Page<AlarmCall> findAll(Pageable pageable);
 
@@ -21,4 +27,13 @@ public interface AlarmCallService {
   void makeByProviderId(String providerId);
 
   CallStatisticDto getStatisticByStatus(CallStatus status);
+
+  default double calculateCost(List<AlarmCall> calls) {
+    return calls
+        .stream()
+        .map(AlarmCall::getCost)
+        .filter(Objects::nonNull)
+        .mapToDouble(BigDecimal::doubleValue)
+        .sum();
+  }
 }
