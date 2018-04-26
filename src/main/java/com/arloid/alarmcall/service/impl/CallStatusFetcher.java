@@ -50,17 +50,14 @@ public class CallStatusFetcher {
         (clientId, sid) -> {
           Call call = Call.fetcher(sid).fetch();
           alarmCallService.update(call);
-          log.info("Call sid {} fetched with status {}", call.getSid(), call.getStatus());
+          log.info("Call to client {}, sid {} fetched status {}", clientId, sid, call.getStatus());
           if (UNSUCCESSFUL_CALL_STATUSES.contains(call.getStatus())) {
             calls.remove(clientId);
             alarmCallService.makeByProviderId(sid);
           } else if (Call.Status.COMPLETED.equals(call.getStatus())) {
             AlarmCall alarmCall = alarmCallService.findByProviderId(call.getSid());
-            if (isNull(alarmCall.getFullyListened())) {
-              log.info("Call {} completed but not fully listened, calling again...", sid);
-              calls.remove(clientId);
-              alarmCallService.makeByProviderId(sid);
-            } else if (nonNull(alarmCall.getFullyListened()) && !alarmCall.getFullyListened()) {
+            if (isNull(alarmCall.getFullyListened())
+                || (nonNull(alarmCall.getFullyListened()) && !alarmCall.getFullyListened())) {
               log.info("Call {} completed but not fully listened, calling again...", sid);
               calls.remove(clientId);
               alarmCallService.makeByProviderId(sid);

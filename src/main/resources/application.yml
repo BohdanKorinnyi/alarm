@@ -32,6 +32,6 @@ amazon:
     bucket: alarm-twiml
 alarm:
   internal:
-    max-call-attempts: 5
+    max-call-attempts: 4
 logging:
   file: alarm-call.log

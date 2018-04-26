@@ -82,7 +82,7 @@ public class AlarmCallServiceImpl implements AlarmCallService {
     }
     Integer attempt = alarmCallRepository.countByParentId(parentId.apply(alarmCall));
     if (alarmCallProperties.getMaxCallAttempts() > attempt) {
-      log.info("Trying to call client by provider id {}, attempt {}", providerId, attempt);
+      log.info("Trying to call client by provider id {}, attempt {}", providerId, attempt + 1);
       retryCall(alarmCall);
     } else {
       log.info(
@@ -101,11 +101,20 @@ public class AlarmCallServiceImpl implements AlarmCallService {
 
   @Override
   public void complete(long clientId) {
-    AlarmCall alarmCall = alarmCallRepository.findByProviderId(getCallSid(clientId));
-    alarmCall.setFullyListened(true);
-    alarmCall.setUpdated(new Date());
-    CallStatusFetcher.remove(clientId);
-    alarmCallRepository.save(alarmCall);
+    String callSid = getCallSid(clientId);
+    try {
+      log.info("Call {} to client {} was listened to and completed", callSid, clientId);
+      CallStatusFetcher.remove(clientId);
+      log.info("Getting calls by provider id {}", callSid);
+      AlarmCall alarmCall = alarmCallRepository.findByProviderId(callSid);
+      alarmCall.setFullyListened(true);
+      alarmCall.setUpdated(new Date());
+      alarmCallRepository.save(alarmCall);
+    } catch (Exception e) {
+      log.error(
+          "An error has occurred during updating call {} for client {}", callSid, clientId, e);
+      CallStatusFetcher.remove(clientId);
+    }
   }
 
   @Override
