@@ -16,5 +16,5 @@ public interface AlarmService {
 
   Alarm findByClientId(long clientId);
 
-  String findTwiMlByClient(long clientId);
+  String getTwiMlByClient(long clientId);
 }

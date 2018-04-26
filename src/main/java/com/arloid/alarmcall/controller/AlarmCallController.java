@@ -24,7 +24,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @Api(tags = "Calls")
 @RequestMapping("calls")
 public class AlarmCallController {
-  private static final File FILE = new File("pixel.mp3");
+  private static final File FILE = new File("/home/mp3/pixel.mp3");
   private final AlarmCallService alarmCallService;
 
   @GetMapping("statistics")
@@ -54,9 +54,12 @@ public class AlarmCallController {
   }
 
   @SneakyThrows
-  @GetMapping("pixels")
-  @ApiOperation(value = "Returns an empty MP3 file. It needs to track end of call")
-  public ResponseEntity track() {
+  @GetMapping("closes/{clientId}")
+  @ApiOperation(
+    value = "Returns an empty MP3 file and tracks the end of the call, Twilio service uses it"
+  )
+  public ResponseEntity completeCallByClientId(@PathVariable long clientId) {
+    alarmCallService.update(clientId);
     FileSystemResource systemResource = new FileSystemResource(FILE);
     byte[] content = new byte[(int) systemResource.contentLength()];
     IOUtils.readFully(systemResource.getInputStream(), content);

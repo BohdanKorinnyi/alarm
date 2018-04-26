@@ -14,4 +14,5 @@ public class TwilioProperties {
   private String token;
   private String number;
   private String alarmEndpoint;
+  private String trackerEndpoint;
 }

@@ -9,6 +9,7 @@ import com.arloid.alarmcall.repository.AlarmCallRepository;
 import com.arloid.alarmcall.service.*;
 import com.twilio.rest.api.v2010.account.Call;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static com.arloid.alarmcall.service.impl.CallStatusFetcher.isClientCallAvailable;
 import static java.lang.Integer.parseInt;
 import static java.util.Objects.isNull;
 import static org.springframework.util.StringUtils.isEmpty;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class AlarmCallServiceImpl implements AlarmCallService {
@@ -59,6 +62,11 @@ public class AlarmCallServiceImpl implements AlarmCallService {
 
   @Override
   public void makeByClientId(long clientId) {
+    log.info("Try to call client {}", clientId);
+    if (isClientCallAvailable(clientId)) {
+      log.info("System has been calling to the client {}", clientId);
+      throw new RuntimeException("System has been calling to the client");
+    }
     CallNumber number = callNumberService.findByClientId(clientId);
     Alarm alarm = alarmService.findByClientId(clientId);
     AlarmCall alarmCall = new AlarmCall();
@@ -69,7 +77,7 @@ public class AlarmCallServiceImpl implements AlarmCallService {
     Call twilioCall = twilioService.makeCall(number.getNumber(), clientId);
     alarmCall.setProviderId(twilioCall.getSid());
     alarmCallRepository.save(alarmCall);
-    CallStatusFetcher.add(twilioCall.getSid());
+    CallStatusFetcher.add(clientId, twilioCall.getSid());
   }
 
   @Override
@@ -94,7 +102,7 @@ public class AlarmCallServiceImpl implements AlarmCallService {
           twilioService.makeCall(callNumber.getNumber(), callNumber.getClient().getId());
       newAlarmCall.setProviderId(twilioCall.getSid());
       alarmCallRepository.save(newAlarmCall);
-      CallStatusFetcher.add(twilioCall.getSid());
+      CallStatusFetcher.add(alarmCall.getId(), twilioCall.getSid());
     }
   }
 
@@ -102,6 +110,17 @@ public class AlarmCallServiceImpl implements AlarmCallService {
   public void update(Call call) {
     AlarmCall alarmAlarmCall = alarmCallRepository.findByProviderId(call.getSid());
     alarmCallRepository.save(updateCall(call, alarmAlarmCall));
+  }
+
+  @Override
+  public void update(long clientId) {
+    log.info("Update completed call by client id " + clientId);
+    String callSid = CallStatusFetcher.getCallSid(clientId);
+    AlarmCall alarmCall = alarmCallRepository.findByProviderId(callSid);
+    alarmCall.setFullyListened(true);
+    alarmCall.setUpdated(new Date());
+    alarmCallRepository.save(alarmCall);
+    CallStatusFetcher.remove(clientId);
   }
 
   private AlarmCall updateCall(Call call, AlarmCall alarmAlarmCall) {

@@ -6,9 +6,9 @@ import com.twilio.rest.api.v2010.account.Call;
 public interface TwilioService {
   Call makeCall(String number, long clientId);
 
-  String buildSayResponse(String message, Language language);
+  String generateSayTwiMl(String message, Language language, long clientId);
 
-  String buildPlayResponse(String message, Language language);
+  String generatePlayTwiMl(String message, Language language, long clientId);
 
   boolean isCorrectLanguageCode(String code);
 }

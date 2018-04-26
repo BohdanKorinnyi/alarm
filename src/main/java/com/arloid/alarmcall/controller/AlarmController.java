@@ -47,6 +47,6 @@ public class AlarmController {
   @PostMapping(value = "{clientId}", produces = MediaType.TEXT_XML_VALUE)
   @ApiOperation(value = "Returns TwiMl by the client id")
   public ResponseEntity getTwiMlAlarm(@PathVariable long clientId) {
-    return ok(alarmService.findTwiMlByClient(clientId));
+    return ok(alarmService.getTwiMlByClient(clientId));
   }
 }
