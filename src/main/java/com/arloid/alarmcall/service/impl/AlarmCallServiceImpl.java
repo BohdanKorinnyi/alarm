@@ -103,7 +103,6 @@ public class AlarmCallServiceImpl implements AlarmCallService {
     try {
       log.info("Call {} to client {} was listened to and completed", callSid, clientId);
       Call fetchedCall = Call.fetcher(callSid).fetch();
-      CallStatusFetcher.remove(clientId);
       log.info("Getting calls by provider id {}", callSid);
       AlarmCall alarmCall = alarmCallRepository.findByProviderId(callSid);
       alarmCall.setFullyListened(true);
@@ -134,6 +133,6 @@ public class AlarmCallServiceImpl implements AlarmCallService {
     Call twilioCall = twilioService.makeCall(alarmCall.getCallNumber().getNumber(), clientId);
     newAlarmCall.setProviderId(twilioCall.getSid());
     alarmCallRepository.save(newAlarmCall);
-    CallStatusFetcher.add(alarmCall.getId(), twilioCall.getSid());
+    CallStatusFetcher.add(clientId, twilioCall.getSid());
   }
 }
