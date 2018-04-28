@@ -46,26 +46,33 @@ public class CallStatusFetcher {
   @SneakyThrows
   @Scheduled(fixedRate = 4000L)
   public void fetchStatus() {
-    calls.forEach(
-        (clientId, sid) -> {
-          Call call = Call.fetcher(sid).fetch();
-          alarmCallService.update(call);
-          log.info("Call to client {}, sid {} fetched status {}", clientId, sid, call.getStatus());
-          if (UNSUCCESSFUL_CALL_STATUSES.contains(call.getStatus())) {
-            calls.remove(clientId);
-            alarmCallService.makeByProviderId(sid);
-          } else if (Call.Status.COMPLETED.equals(call.getStatus())) {
-            AlarmCall alarmCall = alarmCallService.findByProviderId(call.getSid());
-            if (isNull(alarmCall.getFullyListened())
-                || (nonNull(alarmCall.getFullyListened()) && !alarmCall.getFullyListened())) {
-              log.info("Call {} completed but not fully listened, calling again...", sid);
-              calls.remove(clientId);
-              alarmCallService.makeByProviderId(sid);
-            } else {
-              log.info("Call {} completed and fully listened!", sid);
-              calls.remove(clientId);
-            }
-          }
-        });
+    calls.forEach(this::updateStatus);
+  }
+
+  private void updateStatus(long clientId, String sid) {
+    Call call = Call.fetcher(sid).fetch();
+    alarmCallService.update(call);
+    log.info(
+        "Call status to client {}, sid {}, fetched status {}", clientId, sid, call.getStatus());
+    if (UNSUCCESSFUL_CALL_STATUSES.contains(call.getStatus())) {
+      calls.remove(clientId);
+      log.info("Call {} is not success, status is {}", sid, call.getStatus());
+      alarmCallService.makeByProviderId(sid);
+    } else if (Call.Status.COMPLETED.equals(call.getStatus())) {
+      processCompletedCall(call, clientId);
+    }
+  }
+
+  private void processCompletedCall(Call call, long clientId) {
+    AlarmCall alarmCall = alarmCallService.findByProviderId(call.getSid());
+    if (isNull(alarmCall.getFullyListened())
+        || (nonNull(alarmCall.getFullyListened()) && !alarmCall.getFullyListened())) {
+      log.info("Call {} completed but not fully listened, calling again...", call.getSid());
+      calls.remove(clientId);
+      alarmCallService.makeByProviderId(call.getSid());
+    } else {
+      log.info("Call {} completed and fully listened!", call.getSid());
+      calls.remove(clientId);
+    }
   }
 }

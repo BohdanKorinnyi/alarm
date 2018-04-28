@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
@@ -77,8 +76,7 @@ public class AlarmCallServiceImpl implements AlarmCallService {
     AlarmCall alarmCall = alarmCallRepository.findByProviderId(providerId);
     if (alarmCall.getCallStatus().equals(callStatusService.findByName(COMPLETED))) {
       Call call = Call.fetcher(providerId).fetch();
-      alarmCallRepository.save(
-          alarmCall.copy(call, callStatusService.findByName(call.getStatus().toString())));
+      alarmCallRepository.save(alarmCall.copy(call, callStatusService.findByName(call.getStatus().toString())));
     }
     Integer attempt = alarmCallRepository.countByParentId(parentId.apply(alarmCall));
     if (alarmCallProperties.getMaxCallAttempts() > attempt) {
@@ -104,11 +102,13 @@ public class AlarmCallServiceImpl implements AlarmCallService {
     String callSid = getCallSid(clientId);
     try {
       log.info("Call {} to client {} was listened to and completed", callSid, clientId);
+      Call fetchedCall = Call.fetcher(callSid).fetch();
       CallStatusFetcher.remove(clientId);
       log.info("Getting calls by provider id {}", callSid);
       AlarmCall alarmCall = alarmCallRepository.findByProviderId(callSid);
       alarmCall.setFullyListened(true);
-      alarmCall.setUpdated(new Date());
+      alarmCall.setCallStatus(callStatusService.findByName(fetchedCall.getStatus().toString()));
+      alarmCall.copy(fetchedCall);
       alarmCallRepository.save(alarmCall);
     } catch (Exception e) {
       log.error(
