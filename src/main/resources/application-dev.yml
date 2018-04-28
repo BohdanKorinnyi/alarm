@@ -9,3 +9,6 @@ spring:
   jpa:
     show-sql: true
     hibernate.ddl-auto: update
+alarm:
+  internal:
+    max-call-attempts: 2

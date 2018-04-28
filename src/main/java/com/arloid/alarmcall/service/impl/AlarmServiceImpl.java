@@ -56,6 +56,7 @@ public class AlarmServiceImpl implements AlarmService {
 
   @Override
   public Alarm findByClientId(long clientId) {
+    log.info("Getting alarm by client id {}", clientId);
     return alarmRepository.findByClientId(clientId);
   }
 

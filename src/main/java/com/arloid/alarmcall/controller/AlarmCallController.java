@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.io.File;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @Api(tags = "Calls")
@@ -49,6 +51,7 @@ public class AlarmCallController {
   @PostMapping("clients/{clientId}")
   @ApiOperation(value = "Makes a call by the client id")
   public ResponseEntity makeToClient(@PathVariable long clientId) {
+    log.info("Calling to client {}", clientId);
     alarmCallService.makeByClientId(clientId);
     return ok().build();
   }
@@ -59,7 +62,8 @@ public class AlarmCallController {
     value = "Returns an empty MP3 file and tracks the end of the call, Twilio service uses it"
   )
   public ResponseEntity completeCallByClientId(@PathVariable long clientId) {
-    alarmCallService.update(clientId);
+    log.info("Client {} has listened to call completely", clientId);
+    alarmCallService.complete(clientId);
     FileSystemResource systemResource = new FileSystemResource(FILE);
     byte[] content = new byte[(int) systemResource.contentLength()];
     IOUtils.readFully(systemResource.getInputStream(), content);

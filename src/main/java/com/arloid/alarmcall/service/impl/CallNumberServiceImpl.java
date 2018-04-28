@@ -6,10 +6,12 @@ import com.arloid.alarmcall.repository.CallNumberRepository;
 import com.arloid.alarmcall.service.CallNumberService;
 import com.arloid.alarmcall.service.ClientService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class CallNumberServiceImpl implements CallNumberService {
@@ -37,6 +39,7 @@ public class CallNumberServiceImpl implements CallNumberService {
 
   @Override
   public CallNumber findByClientId(long clientId) {
+    log.info("Getting call number by client id {}", clientId);
     return callNumberRepository.findByClientId(clientId);
   }
 }
