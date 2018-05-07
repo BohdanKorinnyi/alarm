@@ -18,28 +18,47 @@
 
     <div class="row">
       <div class="col-md-12">
-        <div class="card ">
+        <div class="card">
           <div class="card-header ">
-            <h4 class="card-title">Clients</h4>
+            <h4 class="card-title">Calls</h4>
           </div>
           <div class="card-body ">
             <table class="table">
               <thead>
               <tr>
-                <td>Call ID</td>
-                <td>Name</td>
-                <td>Proof</td>
-                <td>Registered</td>
-                <td>Updated</td>
-                <td>External ID</td>
+                <td>#</td>
+                <td>Number</td>
+                <td>Created</td>
+                <td>Completed</td>
+                <td>Status</td>
+                <td>Duration</td>
+                <td>Cost</td>
+                <td>Language</td>
+                <td>Alarm Id</td>
+                <td>Alarm Parent Id</td>
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let call of calls">
-                <td>{{client.id}}</td>
+              <tr *ngFor="let call of calls; let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{call.callNumber.number}}</td>
+                <td>{{formatDate(call.creation)}}</td>
+                <td>{{formatDate(call.updated)}}</td>
+                <td>{{call.callStatus.name}}</td>
+                <td>{{formatDuration(call.duration)}} s</td>
+                <td>{{formatCost(call.cost)}} $</td>
+                <td>{{formatLanguage(call.alarm)}}</td>
+                <td>{{call.id}}</td>
+                <td>{{call.parentId}}</td>
               </tr>
               </tbody>
             </table>
+            <ul class="pagination pagination-primary">
+              <li class="page-item active"
+                  [ngClass]="{'page-item active': currentPage === i}"
+                  *ngFor="let p of pages; let i = index"><a
+                class="page-link" (click)="loadPage(i)">{{i + 1}}</a></li>
+            </ul>
           </div>
         </div>
       </div>

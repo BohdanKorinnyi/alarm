@@ -8,21 +8,23 @@
         <table class="table">
           <thead>
           <tr>
-            <td>ID</td>
+            <td>#</td>
             <td>Name</td>
-            <td>Proof</td>
+            <!--<td>Proof</td>-->
             <td>Registered</td>
             <td>Updated</td>
-            <td>External ID</td>
+            <td>Internal Id</td>
+            <td>External Id</td>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let client of clients">
-            <td>{{client.id}}</td>
+          <tr *ngFor="let client of clients; let i = index">
+            <td>{{i + 1}}</td>
             <td>{{client.firstName}} {{client.lastName}}</td>
-            <td>{{client.proof ? 'Yes' : 'No'}}</td>
+            <!--<td>{{client.proof ? 'Yes' : 'No'}}</td>-->
             <td>{{formatDate(client.registered)}}</td>
             <td>{{formatDate(client.updated)}}</td>
+            <td>{{client.id}}</td>
             <td>{{client.externalId}}</td>
           </tr>
           </tbody>

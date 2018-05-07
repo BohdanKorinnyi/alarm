@@ -8,7 +8,15 @@ export class CallService {
   constructor(private http: HttpClient) {
   }
 
+  getCalls() {
+    return this.http.get('/calls');
+  }
+
+  getCallsByPage(page: number) {
+    return this.http.get('/calls?page=' + page);
+  }
+
   getCallStatisticsByStatus(status: CallStatus) {
-    return this.http.get('/api/calls/statistics?id=' + status.valueOf());
+    return this.http.get('/calls/statistics?id=' + status.valueOf());
   }
 }
