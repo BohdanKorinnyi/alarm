@@ -9,28 +9,36 @@ import {MainPanelComponent} from './main-panel/main-panel.component';
 import {ClientService} from './service/client.service';
 import {CallService} from './service/call.service';
 import {HttpClientModule} from '@angular/common/http';
-import { ClientsComponent } from './main-panel/clients/clients.component';
-import { ListComponent } from './main-panel/clients/list/list.component';
+import {ListComponent} from './main-panel/clients/list/list.component';
 import {StatsComponent} from './main-panel/clients/stats/stats.component';
-import {CommonModule} from '@angular/common';
+import {RouterModule, Routes} from '@angular/router';
+import {CallsComponent} from './calls/calls.component';
 
+const routes: Routes = [
+  {path: '', redirectTo: 'clients', pathMatch: 'full'},
+  {path: 'clients', component: MainPanelComponent},
+  {path: 'calls', component: CallsComponent},
+  {path: '**', component: MainPanelComponent}
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     MainPanelComponent,
-    ClientsComponent,
     StatsComponent,
-    ListComponent
+    ListComponent,
+    CallsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(routes, {useHash: false})
   ],
   providers: [ClientService, CallService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+
 }

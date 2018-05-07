@@ -9,6 +9,6 @@ export class CallService {
   }
 
   getCallStatisticsByStatus(status: CallStatus) {
-    return this.http.get('/calls/statistics?id=' + status.valueOf());
+    return this.http.get('/api/calls/statistics?id=' + status.valueOf());
   }
 }
