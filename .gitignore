@@ -30,3 +30,4 @@ nbdist/
 /mvnw
 /src/main/frontend/node_modules/
 /src/main/frontend/e2e/
+/alarm-call.log
