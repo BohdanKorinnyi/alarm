@@ -32,6 +32,7 @@ amazon:
     bucket: alarm-twiml
 alarm:
   internal:
+    track-file: mp3/track.mp3
     max-call-attempts: 4
 logging:
   file: alarm-call.log

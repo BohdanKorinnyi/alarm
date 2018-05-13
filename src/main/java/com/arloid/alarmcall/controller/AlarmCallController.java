@@ -1,5 +1,6 @@
 package com.arloid.alarmcall.controller;
 
+import com.arloid.alarmcall.configuration.AlarmCallProperties;
 import com.arloid.alarmcall.dto.CallStatusDto;
 import com.arloid.alarmcall.entity.AlarmCall;
 import com.arloid.alarmcall.service.AlarmCallService;
@@ -9,14 +10,13 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.File;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -26,8 +26,8 @@ import static org.springframework.http.ResponseEntity.ok;
 @Api(tags = "Calls")
 @RequestMapping("calls")
 public class AlarmCallController {
-  private static final File FILE = new File("/home/mp3/pixel.mp3");
   private final AlarmCallService alarmCallService;
+  private final AlarmCallProperties alarmCallProperties;
 
   @GetMapping("statistics")
   @ApiOperation(value = "Returns statistic of calls by status id")
@@ -58,17 +58,15 @@ public class AlarmCallController {
 
   @SneakyThrows
   @GetMapping("closes/{clientId}")
-  @ApiOperation(
-    value = "Returns an empty MP3 file and tracks the end of the call, Twilio service uses it"
-  )
+  @ApiOperation(value = "Returns an empty MP3 file and tracks the end of call, is used by Twilio")
   public ResponseEntity completeCallByClientId(@PathVariable long clientId) {
     log.info("Client {} has listened to call completely", clientId);
     alarmCallService.complete(clientId);
-    FileSystemResource systemResource = new FileSystemResource(FILE);
-    byte[] content = new byte[(int) systemResource.contentLength()];
-    IOUtils.readFully(systemResource.getInputStream(), content);
+    Resource resource = new ClassPathResource(alarmCallProperties.getTrackFile());
+    byte[] content = new byte[(int) resource.contentLength()];
+    IOUtils.readFully(resource.getInputStream(), content);
     return ResponseEntity.ok()
-        .contentLength(FILE.length())
+        .contentLength(content.length)
         .contentType(MediaType.parseMediaType("audio/mp3"))
         .body(content);
   }

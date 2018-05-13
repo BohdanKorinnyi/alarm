@@ -56,6 +56,7 @@ public class TwilioServiceImpl implements TwilioService {
         .pause(PAUSE)
         .say(alarmMessage.apply(message, language.getCode()))
         .play(new Play.Builder(twilioProperties.getTrackerEndpoint() + clientId).build())
+        .say(alarmMessage.apply(message, language.getCode()))
         .build()
         .toXml();
   }
@@ -70,6 +71,7 @@ public class TwilioServiceImpl implements TwilioService {
         .pause(PAUSE)
         .play(new Play.Builder(url).build())
         .play(new Play.Builder(twilioProperties.getTrackerEndpoint() + clientId).build())
+        .play(new Play.Builder(url).build())
         .build()
         .toXml();
   }

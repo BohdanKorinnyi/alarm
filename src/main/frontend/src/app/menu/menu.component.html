@@ -19,13 +19,13 @@
       <li [ngClass]="{'active': clientClicked}" (click)="callClicked = false; clientClicked=true;">
         <a>
           <i class="now-ui-icons emoticons_satisfied"></i>
-          <p style="font-size: 14px" routerLink="/clients" routerLinkActive="active">Clients</p>
+          <p style="font-size: 14px" routerLink="/client" routerLinkActive="active">Clients</p>
         </a>
       </li>
       <li [ngClass]="{'active': callClicked}" (click)="callClicked = true; clientClicked=false;">
         <a>
           <i class="now-ui-icons tech_headphones"></i>
-          <p style="font-size: 14px" routerLink="/calls" routerLinkActive="active">Calls</p>
+          <p style="font-size: 14px" routerLink="/call" routerLinkActive="active">Calls</p>
         </a>
       </li>
     </ul>

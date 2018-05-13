@@ -11,4 +11,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "alarm.internal", ignoreUnknownFields = false)
 public class AlarmCallProperties {
   private int maxCallAttempts;
+  private String trackFile;
 }

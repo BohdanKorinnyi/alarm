@@ -15,9 +15,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {CallsComponent} from './calls/calls.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: 'clients', pathMatch: 'full'},
-  {path: 'clients', component: MainPanelComponent},
-  {path: 'calls', component: CallsComponent},
+  {path: '', redirectTo: 'client', pathMatch: 'full'},
+  {path: 'client', component: MainPanelComponent},
+  {path: 'call', component: CallsComponent},
   {path: '**', component: MainPanelComponent}
 ];
 

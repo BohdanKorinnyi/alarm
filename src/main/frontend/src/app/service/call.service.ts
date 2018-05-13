@@ -9,14 +9,14 @@ export class CallService {
   }
 
   getCalls() {
-    return this.http.get('/calls');
+    return this.http.get('/api/calls');
   }
 
   getCallsByPage(page: number) {
-    return this.http.get('/calls?page=' + page);
+    return this.http.get('/api/calls?page=' + page);
   }
 
   getCallStatisticsByStatus(status: CallStatus) {
-    return this.http.get('/calls/statistics?id=' + status.valueOf());
+    return this.http.get('/api/calls/statistics?id=' + status.valueOf());
   }
 }
