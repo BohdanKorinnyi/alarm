@@ -1,9 +1,0 @@
-/* You can add global styles to this file, and also import other style files */
-@import "assets/css/now-ui-dashboard.css";
-@import "assets/css/menu.css";
-@import "assets/css/custom-loader.css";
-@import "assets/css/themify-icons.css";
-
-.table > thead > tr > th {
-  font-weight: 100 !important;
-}
