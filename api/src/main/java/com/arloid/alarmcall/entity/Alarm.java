@@ -1,5 +1,6 @@
 package com.arloid.alarmcall.entity;
 
+import com.arloid.alarmcall.entity.Client;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

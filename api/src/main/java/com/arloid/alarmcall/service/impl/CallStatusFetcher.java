@@ -24,10 +24,10 @@ public class CallStatusFetcher {
   private static final Map<Long, String> calls = new ConcurrentHashMap<>();
   private static final Set<Call.Status> UNSUCCESSFUL_CALL_STATUSES =
       ImmutableSet.of(
-          com.twilio.rest.api.v2010.account.Call.Status.BUSY,
-          com.twilio.rest.api.v2010.account.Call.Status.NO_ANSWER,
-          com.twilio.rest.api.v2010.account.Call.Status.CANCELED,
-          com.twilio.rest.api.v2010.account.Call.Status.FAILED);
+          Call.Status.BUSY,
+          Call.Status.NO_ANSWER,
+          Call.Status.CANCELED,
+          Call.Status.FAILED);
 
   private final AlarmCallService alarmCallService;
 
