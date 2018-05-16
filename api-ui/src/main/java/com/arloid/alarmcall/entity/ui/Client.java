@@ -1,6 +1,7 @@
 package com.arloid.alarmcall.entity.ui;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public final class Client {

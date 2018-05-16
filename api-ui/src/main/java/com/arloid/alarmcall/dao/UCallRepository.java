@@ -5,31 +5,44 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.query.Param;
 
 public interface UCallRepository extends Repository<Call, Long> {
   @Query(
     nativeQuery = true,
     value =
-        "SELECT public.call.id, public.call_number.number,"
-            + "  public.call.creation,"
-            + "  public.call.updated,"
-            + "  public.call_status.value,"
-            + "  public.call.duration,"
-            + "  public.call.cost,"
-            + "  public.languages.name,"
-            + "  public.call.parent_id"
-            + " FROM public.call "
-            + "  JOIN public.call_status ON public.call.call_status_id = public.call_status.id"
-            + "  JOIN public.alarm ON public.call.alarm_id = public.alarm.id"
-            + "  JOIN public.languages ON public.alarm.language_id = public.languages.id"
-            + "  JOIN public.call_number ON public.call.call_number_id = public.call_number.id ",
+        "SELECT c.id, cn.number, c.creation, c.updated, cs.value, c.duration, c.cost, l.name, c.parent_id, c.cost"
+            + " FROM public.call AS c"
+            + "  JOIN public.call_status AS cs ON c.call_status_id = cs.id"
+            + "  JOIN public.alarm AS a ON c.alarm_id = a.id"
+            + "  JOIN public.languages AS l ON a.language_id = l.id"
+            + "  JOIN public.call_number AS cn ON c.call_number_id = cn.id ",
     countQuery =
-        "SELECT count(public.call.id)"
-            + " FROM public.call "
-            + "  JOIN public.call_status ON public.call.call_status_id = public.call_status.id"
-            + "  JOIN public.alarm ON public.call.alarm_id = public.alarm.id"
-            + "  JOIN public.languages ON public.alarm.language_id = public.languages.id"
-            + "  JOIN public.call_number ON public.call.call_number_id = public.call_number.id "
+        "SELECT count(c.id) FROM public.call AS c"
+            + "  JOIN public.call_status AS cs ON c.call_status_id = cs.id"
+            + "  JOIN public.alarm AS a ON c.alarm_id = a.id"
+            + "  JOIN public.languages AS l ON a.language_id = l.id"
+            + "  JOIN public.call_number AS cn ON c.call_number_id = cn.id "
   )
   Page<Call> find(Pageable pageable);
+
+  @Query(
+    nativeQuery = true,
+    value =
+        "SELECT c.id, cn.number, c.creation, c.updated, cs.value, c.duration, c.cost, l.name, c.parent_id, c.cost"
+            + " FROM public.call AS c"
+            + "  JOIN public.call_status AS cs ON c.call_status_id = cs.id"
+            + "  JOIN public.alarm AS a ON c.alarm_id = a.id"
+            + "  JOIN public.languages AS l ON a.language_id = l.id"
+            + "  JOIN public.call_number AS cn ON c.call_number_id = cn.id "
+            + " WHERE cn.number LIKE CONCAT('%', :number, '%')",
+    countQuery =
+        "SELECT count(c.id) FROM public.call AS c"
+            + "  JOIN public.call_status AS cs ON c.call_status_id = cs.id"
+            + "  JOIN public.alarm AS a ON c.alarm_id = a.id"
+            + "  JOIN public.languages AS l ON a.language_id = l.id"
+            + "  JOIN public.call_number AS cn ON c.call_number_id = cn.id "
+            + " WHERE cn.number LIKE CONCAT('%', :number, '%')"
+  )
+  Page<Call> findByNumber(@Param("number") String number, Pageable pageable);
 }
